@@ -1,0 +1,12 @@
+Package: llvm
+Type: Package
+Title: Symbolic LLVM Instruction Model
+Version: 0.9.5
+Date: 2021-03-29
+Author: Ferhat Erata
+Maintainer: Ferhat Erata <ferhat.erata@yale.edu>
+Description: A simulation for LLVM Instruction set
+License: GPL (>= 2)
+Imports: Rcpp (>= 1.0.6)
+LinkingTo: Rcpp
+SystemRequirements: C++14

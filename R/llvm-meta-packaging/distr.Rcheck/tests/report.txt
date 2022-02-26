@@ -1,0 +1,48 @@
+= A svUnit test suite run in less than 0.1 sec with:
+
+* test.qqplot3 ... **ERROR**
+* test.qqplot2 ... **ERROR**
+* test.qqplot1 ... **ERROR**
+* test.minimum ... **ERROR**
+* test.operatorsMethods ... **ERROR**
+
+
+== test.qqplot3 (in runit.dontrunQQPlot.R) run in less than 0.1 sec: **ERROR**
+
+//Pass: 0 Fail: 0 Errors: 1//
+
+=== Errors
+[1] : .runTest(envir = .ThisTestSuiteEnv, test = test, unit = Unit)
+
+
+== test.qqplot2 (in runit.dontrunQQPlot.R) run in less than 0.1 sec: **ERROR**
+
+//Pass: 0 Fail: 0 Errors: 1//
+
+=== Errors
+[1] : .runTest(envir = .ThisTestSuiteEnv, test = test, unit = Unit)
+
+
+== test.qqplot1 (in runit.dontrunQQPlot.R) run in less than 0.1 sec: **ERROR**
+
+//Pass: 0 Fail: 0 Errors: 1//
+
+=== Errors
+[1] : .runTest(envir = .ThisTestSuiteEnv, test = test, unit = Unit)
+
+
+== test.minimum (in runit.dontrunMinimum.R) run in less than 0.1 sec: **ERROR**
+
+//Pass: 0 Fail: 0 Errors: 1//
+
+=== Errors
+[1] : .runTest(envir = .ThisTestSuiteEnv, test = test, unit = Unit)
+
+
+== test.operatorsMethods (in runit.dontrunOperatorsMethods.R) run in less than 0.1 sec: **ERROR**
+
+//Pass: 0 Fail: 0 Errors: 1//
+
+=== Errors
+[1] : .runTest(envir = .ThisTestSuiteEnv, test = test, unit = Unit)
+

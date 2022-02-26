@@ -1,0 +1,23 @@
+---
+title: "R Notebook"
+author: ferhat
+date: 20.02.2021
+output: html_document
+---
+
+
+```{r}
+# setwd("experiments/checkpoint-ref/.energytrace")
+
+trace <- read.csv("experiments/checkpoint-ref/.energytrace/EnergyTrace_D_2021_02_20_134317.csv")
+# https://e2e.ti.com/support/microcontrollers/msp430/f/166/t/229082?Energy-Per-CPU-cycle
+# View(trace)
+
+hist(x = trace$Energy..uJ., breaks = 200)
+hist(x = trace$Voltage..mV., breaks = 5)
+plot(trace$Time..ns., trace$Energy..uJ.)
+
+set.seed(100)
+v <- rnorm(100, mean = 1000000, sd = 1000)
+View(v)
+```

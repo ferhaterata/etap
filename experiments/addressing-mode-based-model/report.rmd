@@ -1,0 +1,189 @@
+---
+title: "Addressing Mode-based Model"
+author: ferhat erata
+date: 14.03.2021
+output: ioslides_presentation
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r title, echo = FALSE, message = FALSE, results='asis'}
+
+rm(list = ls(all.names = TRUE)) #will clear all objects includes hidden objects.
+options("StartupBanner" = "off")
+library(distr)
+distroptions("WarningArith" = FALSE)
+options(scipen = 999)
+set.seed(100)
+library(pander)
+
+LPM_CURRENT <- 250000 # nA
+BLOCK_COUNT <- 8
+BOOTSTRAP_COUNT <- 10000
+
+forloop_time <- distr::Norm(mean = 2310614078, sd = 45932124) # ns
+forloop_energy <- distr::Norm(mean = 3128.09, sd = 62.13) # uj
+
+# energy_trace <- read.csv("experiments/addressing-mode-based-model/.energytrace/EnergyTrace_ADD_addressing_modes_21_2021_03_10_151035_new_haven.csv", header = TRUE, sep = ",")
+# energy_trace <- read.csv("experiments/addressing-mode-based-model/.energytrace/EnergyTrace_ADD_addressing_modes_50_2021_03_10_131920.csv", header = TRUE, sep = ",")
+# energy_trace <- read.csv("experiments/addressing-mode-based-model/.energytrace/EnergyTrace_MOV_addressing_modes_50_2021_03_10_123232_new_haven.csv", header = TRUE, sep = ",")
+energy_trace <- read.csv("/home/ferhat/git/analysis-framework-standalone-application/experiments/addressing-mode-based-model/.energytrace/EnergyTrace_MOV_addressing_modes_30_2021_03_09_164332_new_haven.csv", header = TRUE, sep = ",")
+# energy_trace <- read.csv("experiments/addressing-mode-based-model/.energytrace/EnergyTrace_MOV_addressing_modes_20_2021_03_09_160257_new_haven.csv", header = TRUE, sep = ",")
+# energy_trace <- energy_trace[[1]]
+names(energy_trace) <- list("Time(ns)", "Current(nA)", "Voltage(mV)", "Energy(uJ)")
+
+energy_trace <- energy_trace[energy_trace$`Current(nA)` != "0",] # remove initial 0 current
+
+time_list <- as.double(energy_trace$`Time(ns)`)
+current_list <- as.double(energy_trace$`Current(nA)`)
+energy_list <- as.double(energy_trace$`Energy(uJ)`)
+
+block_counter <- 0
+block_time_list <- list()
+block_time_start <- time_list[[1]]
+block_time_finish <- 0
+
+block_energy_list <- list()
+block_energy_start <- energy_list[[1]]
+block_energy_finish <- 0
+
+lpm <- 0
+for (i in seq_along(current_list)) {
+  if (current_list[[i]] < LPM_CURRENT) {
+    # LPM start time
+    if (!lpm) {
+
+      block_time_finish <- time_list[[i]]
+      block_energy_finish <- energy_list[[i]]
+
+      b_name <- paste0("block:", block_counter)
+
+      block_time_list[[b_name]] <- append(block_time_list[[b_name]], (block_time_finish - block_time_start))
+      block_energy_list[[b_name]] <- append(block_energy_list[[b_name]], (block_energy_finish - block_energy_start))
+
+      block_counter <- block_counter + 1
+      if (block_counter == BLOCK_COUNT) {
+        block_counter <- 0
+      }
+    }
+    lpm <- 1
+  }else {
+    # LPM end time
+    if (lpm) {
+      block_time_start <- time_list[[i]]
+      block_energy_start <- energy_list[[i]]
+    }
+    lpm <- 0
+  }
+}
+modes <- c(
+  "00 0",
+  "00 1",
+  "01 0",
+  "01 1",
+  "10 0",
+  "10 1",
+  "11 0",
+  "11 1")
+
+pandoc.header("Timing", level = 1)
+
+block_time_dist_list <- list()
+for (i in 1:BLOCK_COUNT) {
+  bb <- block_time_list[[i]]  # ns
+  x_bar <- mean(bb)
+  # cat("\nblock_time:", i, "sample mean: ", x_bar, "\n\t")
+  n <- length(bb)
+  bootstrap_dist <- vector()
+  for (j in 1:BOOTSTRAP_COUNT) {
+    bootstrap_dist <- append(bootstrap_dist, mean(sample(bb, n, replace = TRUE)))
+  }
+  se <- sd(bootstrap_dist) # se (standard error) is sd of sampling distribution
+  mb <- mean(bootstrap_dist) # mean of the boot would be similar to sample mean
+  # cat("se : ", se)
+  # cat("\nbs mean : ", mb, "\n")
+  population_distr <- distr::Norm(x_bar, se)
+  mov_100000times <- population_distr - forloop_time
+  mov <- mov_100000times / 100000  # for 1 instruction
+  mov <- mov / 1000 # ns to us
+  block_time_dist_list[[i]] <- mov
+
+  pandoc.header(paste0("Timing ($\\mu$s) - Mode: ", modes[i], " @ 1 MHz"), level = 2)
+
+  plot(population_distr, to.draw.arg = "d", bty = "7",
+       panel.first = grid(lwd = 1), lwd = 1, vertical = FALSE, xlab = "us",
+       col.points = c("red", "black"), cex.points = 1.8, col = "red")
+  hist(bootstrap_dist, prob = TRUE, breaks = 100, add = TRUE)
+
+  q <- round(quantile(bootstrap_dist, c(0.025, 0.975)), 2)
+  abline(v = q, col = "skyblue")
+  abline(v = median(bootstrap_dist), col = "skyblue")
+  pandoc.p(paste0("\n95% Confidence Interval: (", q[1], "ms, ", q[2], "ms)"))
+}
+
+pandoc.header("Energy Consumption", level = 1)
+
+block_energy_dist_list <- list()
+for (i in 1:BLOCK_COUNT) {
+  bb <- block_energy_list[[i]]  # uj
+  x_bar <- mean(bb)
+  # cat("\nblock_energy:", i, "sample mean: ", x_bar, "\n\t")
+  n <- length(bb)
+  bootstrap_dist <- vector()
+  for (j in 1:BOOTSTRAP_COUNT) {
+    bootstrap_dist <- append(bootstrap_dist, mean(sample(bb, n, replace = TRUE)))
+  }
+  se <- sd(bootstrap_dist) # se (standard error) is sd of sampling distribution
+  mb <- mean(bootstrap_dist) # mean of the boot would be similar to sample mean
+  # cat("se : ", se)
+  # cat("\nbs mean : ", mb, "\n")
+  population_distr <- distr::Norm(x_bar, se)
+  mov_100000times <- population_distr - forloop_energy
+  mov <- mov_100000times / 100000  # for 1 instruction
+  mov <- mov * 1000 # uj to nj
+  block_energy_dist_list[[i]] <- mov
+
+  pandoc.header(paste0("Energy(nj) - Mode: ", modes[i], " @ 1 MHz"), level = 2)
+
+  plot(population_distr, to.draw.arg = "d", bty = "7",
+       panel.first = grid(lwd = 1), lwd = 1, vertical = FALSE, xlab = "nj",
+       col.points = c("red", "black"), cex.points = 1.8, col = "red")
+  hist(bootstrap_dist, prob = TRUE, breaks = 100, add = TRUE)
+
+  q <- round(quantile(bootstrap_dist, c(0.025, 0.975)), 2)
+  abline(v = q, col = "skyblue")
+  abline(v = median(bootstrap_dist), col = "skyblue")
+  pandoc.p(paste0("\n95% Confidence Interval: (", q[1], "ms, ", q[2], "ms)"))
+}
+
+print_addressing_modes_time <- function() {
+  cat("\nTime @ 1 MHz (us)")
+  cat("\nMode ", "Mean", "Sd")
+  cat("\n00 0 ", round(mean(block_time_dist_list[[1]]), 2), round(sd(block_time_dist_list[[1]]), 2))
+  cat("\n00 1 ", round(mean(block_time_dist_list[[2]]), 2), round(sd(block_time_dist_list[[2]]), 2))
+  cat("\n01 0 ", round(mean(block_time_dist_list[[3]]), 2), round(sd(block_time_dist_list[[3]]), 2))
+  cat("\n01 1 ", round(mean(block_time_dist_list[[4]]), 2), round(sd(block_time_dist_list[[4]]), 2))
+  cat("\n10 0 ", round(mean(block_time_dist_list[[5]]), 2), round(sd(block_time_dist_list[[5]]), 2))
+  cat("\n10 1 ", round(mean(block_time_dist_list[[6]]), 2), round(sd(block_time_dist_list[[6]]), 2))
+  cat("\n11 0 ", round(mean(block_time_dist_list[[7]]), 2), round(sd(block_time_dist_list[[7]]), 2))
+  cat("\n11 1 ", round(mean(block_time_dist_list[[8]]), 2), round(sd(block_time_dist_list[[8]]), 2))
+
+}
+
+print_addressing_modes_energy <- function() {
+  cat("\nEnergy (nj)")
+  cat("\nMode ", "Mean", "Sd")
+  cat("\n00 0 ", round(mean(block_energy_dist_list[[1]]), 2), round(sd(block_energy_dist_list[[1]]), 2))
+  cat("\n00 1 ", round(mean(block_energy_dist_list[[2]]), 2), round(sd(block_energy_dist_list[[2]]), 2))
+  cat("\n01 0 ", round(mean(block_energy_dist_list[[3]]), 2), round(sd(block_energy_dist_list[[3]]), 2))
+  cat("\n01 1 ", round(mean(block_energy_dist_list[[4]]), 2), round(sd(block_energy_dist_list[[4]]), 2))
+  cat("\n10 0 ", round(mean(block_energy_dist_list[[5]]), 2), round(sd(block_energy_dist_list[[5]]), 2))
+  cat("\n10 1 ", round(mean(block_energy_dist_list[[6]]), 2), round(sd(block_energy_dist_list[[6]]), 2))
+  cat("\n11 0 ", round(mean(block_energy_dist_list[[7]]), 2), round(sd(block_energy_dist_list[[7]]), 2))
+  cat("\n11 1 ", round(mean(block_energy_dist_list[[8]]), 2), round(sd(block_energy_dist_list[[8]]), 2))
+}
+
+# print_addressing_modes_time()
+# print_addressing_modes_energy()
+```

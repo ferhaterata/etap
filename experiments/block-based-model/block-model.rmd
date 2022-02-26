@@ -1,0 +1,46 @@
+## A tool to automatically derive block-based energy/timing model.
+
+LLVM IR -> MSP430 Binary -> Syntactic Block Extraction ->
+Auto-sampling of Blocks -> Sampling Distribution for blocks ->
+Fitting a Normal Distribution for Energy Consumption and Timing.
+
+```c
+// sample size 10 -> Derive Standard Error from the bootstrap distribution
+// sleep idle active
+// function calls are inlined
+for(int i=0; i < 10; i++){
+    // interrupt -> make idle
+
+    while(10000) { // due to measurement precision
+        // @KeyExpansion%for.cond
+    // _asm_ block 1  -- blocks usually end with a jump, replace them with a similar immediate-to-register inst.
+    }
+    LPM4; // sleep
+
+    // interrupt -> make idle
+
+    while(10000) { // active
+    // _asm_ block 2
+    }
+    LPM4; // sleep
+
+    while(10000) { // active
+    // _asm_ block 2
+    }
+    LPM4; // sleep
+
+    ...
+}
+```
+
+Add power failure check instructions: the length of the basic block increases, the
+rate of power failures should increase.
+
+For instance, such an algorithm would be as follows: let's assume the block b in the figure is relatively long, I can split this basic-block into two using unconditional jumps, and then if the second part is still above the threshold, I can split the remaining part into two, and so on. My intuition is that as the size of the block increases, the likelihood of having a power failure increases too.
+
+## Example Code
+### Sieve of Eratosthenes
+Link: https://godbolt.org/z/z9rfrx
+
+### Bit Shifter
+Link: https://godbolt.org/z/6a1Wc4

@@ -1,0 +1,22 @@
+---
+title: "R Notebook"
+author: ferhat
+date: 20.02.2021
+output: html_document
+---
+
+
+```{r}
+#setwd("experiments/energy-per-cycle-measurement/.energytrace")
+
+trace <- read.csv("experiments/energy-per-cycle-measurement/.energytrace/Energy-per-cycle-aes-1sec.csv")
+trace_empty_project <- read.csv("experiments/energy-per-cycle-measurement/.energytrace/Energy-per-cycle-emptyProject-1sec.csv")
+# https://e2e.ti.com/support/microcontrollers/msp430/f/166/t/229082?Energy-Per-CPU-cycle
+# View(trace)
+
+hist(x = trace$Energy..uJ., breaks = 200)
+hist(x = trace_empty_project$Energy..uJ., breaks = 200)
+# hist(x = trace$Voltage..mV., breaks = 5)
+plot(trace$Time..ns., trace$Energy..uJ.)
+plot(trace_empty_project$Time..ns., trace_empty_project$Energy..uJ.)
+```

@@ -1,0 +1,3878 @@
+
+R Under development (unstable) (2019-02-27 r76167) -- "Unsuffered Consequences"
+Copyright (C) 2019 The R Foundation for Statistical Computing
+Platform: i386-w64-mingw32/i386 (32-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> pkgname <- "distr"
+> source(file.path(R.home("share"), "R", "examples-header.R"))
+> options(warn = 1)
+> options(pager = "console")
+> library('distr')
+Loading required package: startupmsg
+:startupmsg>  Utilities for Start-Up Messages (version 0.9.6)
+:startupmsg> 
+:startupmsg>  For more information see ?"startupmsg",
+:startupmsg>  NEWS("startupmsg")
+
+Loading required package: sfsmisc
+:distr>  Object Oriented Implementation of Distributions (version
+:distr>  2.8.0)
+:distr> 
+:distr>  Attention: Arithmetics on distribution objects are
+:distr>  understood as operations on corresponding random variables
+:distr>  (r.v.s); see distrARITH().
+:distr> 
+:distr>  Some functions from package 'stats' are intentionally masked
+:distr>  ---see distrMASK().
+:distr> 
+:distr>  Note that global options are controlled by distroptions()
+:distr>  ---c.f. ?"distroptions".
+:distr> 
+:distr>  For more information see ?"distr", NEWS("distr"), as well as
+:distr>    http://distr.r-forge.r-project.org/
+:distr>  Package "distrDoc" provides a vignette to this package as
+:distr>  well as to several extension packages; try
+:distr>  vignette("distr").
+
+
+Attaching package: 'distr'
+
+The following objects are masked from 'package:stats':
+
+    df, qqplot, sd
+
+> 
+> base::assign(".oldSearch", base::search(), pos = 'CheckExEnv')
+> base::assign(".old_wd", base::getwd(), pos = 'CheckExEnv')
+> cleanEx()
+> nameEx("0distr-package")
+> ### * 0distr-package
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: distr-package
+> ### Title: distr - Object Oriented Implementation of Distributions
+> ### Aliases: distr-package distr
+> ### Keywords: package distribution
+> 
+> ### ** Examples
+> 
+> X <- Unif(2,3)
+> Y <- Pois(lambda = 3)
+> Z <- X+Y  # generates Law of corresponding independent variables
+> p(Z)(0.2)
+[1] 0
+> r(Z)(1000)
+   [1]  6.579102  4.779275  3.372658  4.632594  3.217653  2.833188  5.836883
+   [8]  4.328749  6.265813  2.547148  6.076999  8.133506  3.549124  7.967771
+  [15]  4.282188  5.334846  5.539449  5.441803  3.869821  6.553436  6.532861
+  [22]  8.883538  5.557134  7.066122  5.258768  2.550905  6.796403  3.145013
+  [29]  3.486209  5.707381  6.944007  3.826960  6.383630  8.323171  8.907333
+  [36]  7.056447  2.114501  4.904405  6.198231  5.835608  2.628063  6.578858
+  [43]  3.072209  7.283379  4.889372  5.162274  4.432173  5.755494  4.371829
+  [50]  4.179435  3.676957  3.343576  3.335259  5.945975  5.712469  4.512781
+  [57]  3.670003  6.359885  6.723871  5.154257  4.752679  3.084680  6.164728
+  [64]  5.980637  5.935260  5.065854  2.531672  4.055380  4.378224  5.166891
+  [71]  6.558560  6.743660  6.059266  7.432974  7.402949  4.851098  6.300433
+  [78]  8.925874  3.993535  4.602505  4.957766  2.634655  7.653118  3.972603
+  [85]  5.345732  3.754893  5.776172  8.286398  8.446992  7.560786  6.635046
+  [92]  8.711620  4.107038  4.367655  8.993393  4.432253 10.929256  4.073590
+  [99]  5.577728  7.706458  7.484063  6.119480  3.191338  3.039565  3.491861
+ [106]  5.339283  4.443054  3.735495  3.518061  6.380735  9.683830  4.579353
+ [113]  6.700189  6.147659  3.976503  5.340870  9.642431  4.107585  4.609351
+ [120]  4.178274  5.338655  5.502983  5.574192  3.938589  5.164298  9.568823
+ [127]  6.277261  7.587950  3.822969  3.486584  5.308142  6.057207  3.523045
+ [134]  5.481863  4.357590  3.278691  5.547702  4.912094  2.255964  4.017637
+ [141]  5.827255  6.049479  7.595250  3.981267  6.569439  6.727461  4.151836
+ [148]  5.318238  6.699690  4.854844  4.378279  5.275432  8.988444  2.134025
+ [155]  5.977953  2.642202  5.600517  4.162107  7.143829  3.762430  5.781959
+ [162]  4.217105  4.714697  4.293084  7.271073  5.903164  3.934551  6.452999
+ [169]  3.329169  5.398796  4.169447  6.209014  5.827562  6.347140  5.599187
+ [176]  6.452403  5.093153  7.896114  6.262903  2.711165  4.249534  5.896619
+ [183]  9.174417  5.468117  2.795493  2.341466  3.478540  3.260784  6.985835
+ [190]  4.438382  5.730667  5.680872  5.907649  4.760867  6.853652  8.254687
+ [197]  4.453843  4.784929  4.591713  2.988044  5.927597  5.885563  4.569294
+ [204]  6.919895  6.290173  4.256231  3.720954  7.162789  3.482136  4.980341
+ [211]  7.714786  7.603208  2.756598  7.042582  3.892577  7.766692  5.472288
+ [218]  5.897596  5.407148  2.767171  5.941631  8.765190  6.650673  3.923338
+ [225]  4.270002  5.960052  6.441325  4.262422  3.362592  8.902643  9.294795
+ [232]  3.214329  7.052151  7.936144  7.840518  6.612929  6.048513  4.269719
+ [239]  7.760647  7.917457  6.042595  4.623126  6.025792  7.996861  2.177719
+ [246]  6.654859  4.661239  3.820550  7.876687  6.082439  5.830691  4.417018
+ [253]  5.066648  3.104336  6.731124  4.594065  5.534583  6.048505  4.615337
+ [260]  9.738851  3.117800 10.366602  2.135035  5.297118  5.908073  2.112919
+ [267]  6.564549  6.008583  4.787502 11.807161  6.509220  8.478424  6.403077
+ [274]  5.543653  6.007867  5.173895  2.896862  5.519487  4.973214  5.805484
+ [281]  5.949032  6.285357  5.619059  5.795161  6.935567  4.526653  5.831893
+ [288]  4.800116  6.658077  4.995597  4.845622  4.879891  6.482920  4.094898
+ [295]  5.028267  6.009440  4.823092  7.043040 10.823171  4.091859  4.864138
+ [302]  4.022668 10.050640  2.949141  6.228148  4.626769  5.439620  4.599773
+ [309]  6.968634  4.994205  3.273534  4.287168  9.199977 10.196245  9.991003
+ [316]  6.955347  5.506245  4.236431  3.517317  5.577783  3.218334  7.222556
+ [323]  4.825124  4.363241  4.924039  3.320962  5.120049  5.210499  4.559181
+ [330]  3.403327  2.789545  6.471046  3.873281  7.176098  4.305160  5.395722
+ [337]  7.004994  4.898506  4.424281  4.020754  3.632583  4.253636  7.789985
+ [344]  5.114602  7.069107  4.200499  3.293541  9.391404  5.353941  4.003051
+ [351]  2.304293  3.531214  6.863910  8.259209  2.093975  4.083890  4.257744
+ [358]  2.086540  6.117788  3.186305  3.069495  5.338623  6.860354  7.781543
+ [365]  6.277202  4.723161  4.633321  6.156335  5.152739  4.158852  6.895088
+ [372]  8.289939  4.018619  2.049620  5.593186  3.241354  3.304142  4.794494
+ [379]  5.750661  6.589345  3.136211  4.627482  5.864843  2.597692  4.197970
+ [386]  4.982050  3.131675  8.181336  8.788943  5.236139  5.860343  6.419425
+ [393]  8.651857  3.579700  5.323007  6.431335  3.417773  4.522973  4.432197
+ [400]  8.182775  5.070290  5.964844  9.542852  4.748663  4.554676  9.680594
+ [407]  7.250223 10.284465  4.126663  5.693831  7.880095  7.968802  3.317698
+ [414]  4.045398  6.949944  5.400209  5.371284  3.324154  3.560770  6.091314
+ [421]  7.774884  5.413062  4.823627  4.365933  3.883124  3.245356  3.594525
+ [428]  4.365887  9.745536  6.011345  8.925059  4.869513  5.638617  8.295089
+ [435]  8.935575  3.663063  5.618220  8.561209  3.176157  5.520921  6.711753
+ [442]  7.925893  4.067052  7.236690  7.695405  4.332264  4.113306  4.939782
+ [449]  7.372087  5.706058  7.751002  6.403756  4.227362  4.273287  6.072921
+ [456]  4.910409  2.459842  7.600472  4.275654  6.973216  6.873162  9.751179
+ [463]  4.136125  6.655204  2.080379  6.265311  4.223805  3.498867  4.924211
+ [470]  5.800581  4.806109  6.664286  2.229823  3.286322  6.061472  3.949581
+ [477]  7.649938  5.617929  6.072907  7.494375  6.440831  8.013917  7.248682
+ [484]  7.171046  5.345439  7.456406  6.654902  6.953591  5.726936  5.247356
+ [491]  3.613288  5.128787  5.052366  4.567321  5.740011  5.750754  9.352847
+ [498]  7.125697  4.866561  4.069580  6.650475  4.244731  4.329885  3.274329
+ [505]  4.979835  7.913374  4.674176  6.326536  7.148619  6.579086  5.477506
+ [512]  7.960702  3.157628  4.002058  6.086027  5.238919  5.590526  4.435348
+ [519]  5.597217  8.762081  5.789205  9.470844  5.934225  8.645870  4.665628
+ [526]  6.270418  6.502792  8.638165  3.534610  7.806940  7.806592  4.497164
+ [533]  4.166165  8.547377  5.185010  5.847412  7.154381  5.697753  3.821394
+ [540]  8.387257  5.753594  7.799001  6.051941  4.888510  6.764761  7.341601
+ [547]  4.123064  4.173528  3.565936  4.346350  6.853956  4.203341  3.216346
+ [554]  5.590785  5.713518  4.339589  5.375326  9.243176  5.887737  2.112778
+ [561]  5.742362  4.044285  5.720649  3.863230  5.039876  5.721132  6.326835
+ [568]  3.726445  3.032174  4.372235  6.415886  4.121232  7.407248  4.424386
+ [575]  4.357479  6.830058  5.365814  6.293699  2.374506  3.719549  2.100653
+ [582]  6.691715  8.235638  4.779743  6.282059  3.706763  6.619718  6.544563
+ [589]  7.924641  3.531242  4.271171  3.905814  8.020223  6.779150  7.364992
+ [596]  5.307303  4.160868  3.176943  5.693852  2.621652  6.468918  5.869892
+ [603]  3.693521  4.506954  5.913281  4.812330  6.404537  6.794142  4.017008
+ [610]  5.548779  6.254126  6.253319  4.624762  4.090745  6.460816  2.913422
+ [617]  4.485198  3.388693  4.171777  3.677474  3.292837  6.075759  5.719630
+ [624]  7.132900  2.991177  8.098001  5.837644  4.548980  4.983142  5.703874
+ [631]  4.281914  6.253390  3.177424  6.002899  5.454130  6.992385  7.816874
+ [638]  8.066406  4.898936  4.829592  3.024088  3.472519  7.272335  7.336495
+ [645]  3.057295  5.205245  5.869878  5.940514  4.960493  4.123543  6.881292
+ [652]  5.565367  5.532138  4.599130  7.057423  3.152381  7.322148  5.617132
+ [659]  6.080236  4.957499  4.928580  5.950919  7.106630  4.557867  5.742990
+ [666]  4.342305  5.370324  5.661521  5.077816  4.189266  7.408123  4.212645
+ [673]  9.980272  5.455587  6.955461  5.027057  4.040872  6.516094  5.102335
+ [680]  4.762621  5.161881  5.168592  7.857960  4.060331  4.329365  5.821864
+ [687]  5.446692  4.958970  4.770069  6.251505  5.219794  4.975353  6.647226
+ [694]  8.646266  2.638373  4.096875  7.459760  5.963888  4.921418  3.200894
+ [701]  4.305496  6.087948  3.489525  6.390110  5.178165  8.226200  7.341701
+ [708]  3.126380  7.065164  4.277436  2.600411  6.273144  4.941489  4.799276
+ [715]  4.089915  4.392771  6.174850  3.456753  7.481765  5.142862  4.034420
+ [722]  4.202052  6.264259  4.744758  3.353447  5.877194  4.135481  5.570409
+ [729]  8.412244  4.225636  4.797575  6.398676  2.591563  6.906964  5.384810
+ [736]  6.371892  5.374292  6.182153  3.041935  6.261203 10.304963  2.178528
+ [743]  5.558146  7.371060  4.642810  5.924116  3.259350  6.239350  3.848965
+ [750]  4.699012  6.884430  7.209243  4.528550  5.228070  8.102115  4.102062
+ [757]  3.150018  2.116710  5.626661  5.515649  2.670773  6.861331  4.636687
+ [764]  9.570007  7.894844  8.275016  4.490435  7.946827  6.142462  5.174121
+ [771]  7.886910  3.507694  6.190410  5.562037  4.547680  3.893744  6.704781
+ [778]  5.561152  7.447658  6.105691  4.658082  7.168129  5.486573  5.167835
+ [785]  3.129796  6.416057  5.255846  4.693766  5.249084  5.958214  8.764405
+ [792]  3.841370  5.875610  2.009616  7.036117  3.285925  6.080532  4.968795
+ [799]  8.564562  6.984705  5.836639  6.880194  3.244425  7.732067  4.498606
+ [806]  6.503376  4.568116  4.652677  8.064712 11.676612  4.735372  3.111300
+ [813]  3.046655  6.130910  4.880956  6.839725  2.868143  3.033383  6.107907
+ [820]  6.549297  8.109318  6.722591  7.725010  4.789522  9.617478  3.503007
+ [827]  4.456149  3.034666  6.209639  5.342787  3.545595  7.769484  4.428765
+ [834]  3.686462  5.521869  5.796536  3.903052  6.432457  6.331940  6.917115
+ [841]  5.209280  5.812735  4.300713  7.572182  5.386782  8.279482  5.260043
+ [848]  5.959384  5.634133  8.081877  3.926206  5.890943  5.912085  5.718499
+ [855]  3.682528  5.555186  6.401709  5.863838  2.074414  5.283284 11.162637
+ [862]  2.763897  5.116376  3.167472  3.475884  4.005788  5.974413  2.114148
+ [869]  2.080774  5.322919  5.118785  9.985772  2.404148  6.241782  4.354879
+ [876]  4.153240  5.287548  6.256672  4.157690  7.029772  4.811628  6.579173
+ [883]  6.576732  2.701487  6.063766  3.502483  3.383950  5.426416  5.544390
+ [890]  6.643638  3.791192  3.846853  4.072626  7.860111  6.956165  5.926419
+ [897]  3.053964  5.246409  6.487370  6.100063  4.195159  6.213572  5.207682
+ [904]  6.028771  8.234566  3.107185  5.277316  2.696022  4.266257  4.660477
+ [911]  7.212417  5.005266  4.102903  6.287400  8.444156  6.692993  7.020884
+ [918]  6.955752  6.804111  5.911740  5.309467  7.323928  4.138360  6.957561
+ [925]  2.232669  5.023715  7.052112  4.932720  5.038752  6.807114  4.696882
+ [932]  4.388051  4.390583  5.982333  3.216765  8.566960  5.980336  6.574558
+ [939]  4.632867  7.782993  2.856876  5.041593  5.895225  4.188517  2.387342
+ [946]  7.494502  4.370316  6.693625  3.733155  4.308550  6.972442  5.243334
+ [953]  5.835028  7.390576  8.908864  6.607566  5.607495  6.894327  2.975288
+ [960]  7.676351  5.091139  3.777949  7.517544  6.652370  5.339298  5.292120
+ [967]  6.783712  2.319966  5.489278  5.134142  5.653294  4.783924  6.921809
+ [974]  8.258464  4.513233  5.858583  3.151414  5.641468  3.825477  7.972295
+ [981]  4.173126  4.710022  6.110715  7.416779  9.284621  4.341155  5.168895
+ [988]  3.547097  3.797206  6.858631  6.332270  3.515725  3.371685  4.436701
+ [995]  5.742429 10.011101  6.046900  4.371818  6.658157  7.529650
+> plot(Z+sin(Norm()))
+> 
+> 
+> cleanEx()
+> nameEx("AbscontDistribution-class")
+> ### * AbscontDistribution-class
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: AbscontDistribution-class
+> ### Title: Class "AbscontDistribution"
+> ### Aliases: AbscontDistribution-class AffLinDistribution-class
+> ###   AffLinAbscontDistribution-class sqrt,AbscontDistribution-method
+> ###   initialize,AbscontDistribution-method
+> ###   initialize,AffLinAbscontDistribution-method
+> ###   sqrt,AbscontDistribution-method
+> ### Keywords: distribution
+> 
+> ### ** Examples
+> 
+> N <-  Norm() # N is a normal distribution with mean=0 and sd=1.
+> E <-  Exp() # E is an exponential distribution with rate=1.
+> A1 <-  E+1 # a new absolutely continuous distributions with exact slots d, p, q
+> A2 <-  A1*3 # a new absolutely continuous distributions with exact slots d, p, q
+> A3 <- N*0.9 + E*0.1 # a new absolutely continuous distribution with approximated slots d, p, q
+> r(A3)(1) # one random number generated from this distribution, e.g. -0.7150937
+[1] -0.5492378
+> d(A3)(0) # The (approximated) density for x=0 is 0.43799.
+[1] 0.4379965
+> p(A3)(0) # The (approximated) probability that x <= 0 is 0.45620.
+[1] 0.4561991
+> q(A3)(.1) # The (approximated) 10 percent quantile is -1.06015.
+[1] -1.060145
+> ## in RStudio or Jupytier IRKernel, use q.l(.)(.) instead of q(.)(.)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("AbscontDistribution")
+> ### * AbscontDistribution
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: AbscontDistribution
+> ### Title: Generating function "AbscontDistribution"
+> ### Aliases: AbscontDistribution
+> ### Keywords: distribution
+> 
+> ### ** Examples
+> 
+> plot(Norm())
+> plot(AbscontDistribution(r = rnorm))
+> plot(AbscontDistribution(d = dnorm))
+> plot(AbscontDistribution(p = pnorm))
+> plot(AbscontDistribution(q = qnorm))
+> plot(Ac <- AbscontDistribution(d = function(x, log = FALSE){
++                                    d <- exp(-abs(x^3))
++                                    ## unstandardized!!
++                                    if(log) d <- log(d)
++                                    return(d)}, 
++                          withStand = TRUE))
+> 
+> 
+> 
+> cleanEx()
+> nameEx("Arcsine-class")
+> ### * Arcsine-class
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: Arcsine-class
+> ### Title: Class "Arcsine"
+> ### Aliases: Arcsine-class Arcsine initialize,Arcsine-method
+> ### Keywords: distribution
+> 
+> ### ** Examples
+> 
+> A <- Arcsine()
+> # A is a Arcsine distribution with shape1 = 1 and shape2 = 1.
+> r(A)(3) # three random number generated from this distribution, e.g. 0.6979795
+[1] -0.6718297 -0.3910154  0.2268826
+> d(A)(c(-2,-1,-0.2,0,0.2,1,2)) # Density at x=c(-1,-0.2,0,0.2,1).
+[1] 0.0000000       Inf 0.3248737 0.3183099 0.3248737       Inf 0.0000000
+> p(A)(c(-2,-1,-0.2,0,0.2,1,2)) # cdf at q=c(-1,-0.2,0,0.2,1).
+[1] 0.0000000 0.0000000 0.4359058 0.5000000 0.5640942 1.0000000 1.0000000
+> q(A)(c(0,0.2,1,2)) # quantile function at at x=c(0,0.2,1).
+[1] -1.000000 -0.809017  1.000000        NA
+> ## in RStudio or Jupyter IRKernel, use q.l(A)(c(0,0.2,1,2)) instead
+> 
+> 
+> 
+> cleanEx()
+> nameEx("Beta-class")
+> ### * Beta-class
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: Beta-class
+> ### Title: Class "Beta"
+> ### Aliases: Beta-class Beta initialize,Beta-method
+> ### Keywords: distribution
+> 
+> ### ** Examples
+> 
+> B <- Beta(shape1 = 1, shape2 = 1)
+> # B is a beta distribution with shape1 = 1 and shape2 = 1.
+> r(B)(1) # one random number generated from this distribution, e.g. 0.6979795
+[1] 0.07614139
+> d(B)(1) # Density of this distribution is 1 for x=1.
+[1] 1
+> p(B)(1) # Probability that x < 1 is 1.
+[1] 1
+> q(B)(.1) # Probability that x < 0.1 is 0.1.
+[1] 0.1
+> shape1(B) # shape1 of this distribution is 1.
+[1] 1
+> shape1(B) <- 2 # shape1 of this distribution is now 2.
+> Bn <- Beta(shape1 = 1, shape2 = 3, ncp = 5) 
+> # Bn is a beta distribution with shape1 = 1 and shape2 = 3 and ncp = 5.
+> B0 <- Bn; ncp(B0) <- 0; 
+> # B0 is just the same beta distribution as Bn but with ncp = 0
+> q(B0)(0.1) ## 
+[1] 0.03451062
+> q(Bn)(0.1) ## => from R 2.3.0 on ncp no longer ignored...
+[1] 0.2047932
+> ## in RStudio or Jupyter IRKernel, use q.l(.)(.) instead of q(.)(.)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("BetaParameter-class")
+> ### * BetaParameter-class
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: BetaParameter-class
+> ### Title: Class "BetaParameter"
+> ### Aliases: BetaParameter-class initialize,BetaParameter-method
+> ### Keywords: distribution
+> 
+> ### ** Examples
+> 
+> W <- new("BetaParameter", shape1 = 1, shape2 = 1, ncp = 0)
+> shape2(W) # shape2 of this distribution is 1.
+[1] 1
+> shape2(W) <- 2 # shape2 of this distribution is now 2.
+> 
+> 
+> 
+> cleanEx()
+> nameEx("Binom-class")
+> ### * Binom-class
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: Binom-class
+> ### Title: Class "Binom"
+> ### Aliases: Binom-class Binom initialize,Binom-method
+> ### Keywords: distribution
+> 
+> ### ** Examples
+> 
+> B <- Binom(prob=0.5,size=1) # B is a binomial distribution with prob=0.5 and size=1.
+> r(B)(1) # # one random number generated from this distribution, e.g. 1
+[1] 0
+> d(B)(1) # Density of this distribution is  0.5 for x=1.
+[1] 0.5
+> p(B)(0.4) # Probability that x<0.4 is 0.5.
+[1] 0.5
+> q(B)(.1) # x=0 is the smallest value x such that p(B)(x)>=0.1.
+[1] 0
+> ## in RStudio or Jupyter IRKernel, use q.l(.)(.) instead of q(.)(.)
+> size(B) # size of this distribution is 1.
+[1] 1
+> size(B) <- 2 # size of this distribution is now 2.
+> C <- Binom(prob = 0.5, size = 1) # C is a binomial distribution with prob=0.5 and size=1.
+> D <- Binom(prob = 0.6, size = 1) # D is a binomial distribution with prob=0.6 and size=1.
+> E <- B + C # E is a binomial distribution with prob=0.5 and size=3.
+> F <- B + D # F is an object of class LatticeDistribution.
+> G <- B + as(D,"DiscreteDistribution") ## DiscreteDistribution
+> 
+> 
+> 
+> cleanEx()
+> nameEx("BinomParameter-class")
+> ### * BinomParameter-class
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: BinomParameter-class
+> ### Title: Class "BinomParameter"
+> ### Aliases: BinomParameter-class initialize,BinomParameter-method
+> ### Keywords: distribution
+> 
+> ### ** Examples
+> 
+> W <- new("BinomParameter",prob=0.5,size=1)
+> size(W) # size of this distribution is 1.
+[1] 1
+> size(W) <- 2 # size of this distribution is now 2.
+> 
+> 
+> 
+> cleanEx()
+> nameEx("Cauchy-class")
+> ### * Cauchy-class
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: Cauchy-class
+> ### Title: Class "Cauchy"
+> ### Aliases: Cauchy-class Cauchy initialize,Cauchy-method
+> ### Keywords: distribution
+> 
+> ### ** Examples
+> 
+> C <- Cauchy(location = 1, scale = 1) # C is a Cauchy distribution with location=1 and scale=1.
+> r(C)(1) # one random number generated from this distribution, e.g. 4.104603
+[1] 2.10252
+> d(C)(1) # Density of this distribution is 0.3183099 for x=1.
+[1] 0.3183099
+> p(C)(1) # Probability that x<1 is 0.5.
+[1] 0.5
+> q(C)(.1) # Probability that x<-2.077684 is 0.1.
+[1] -2.077684
+> ## in RStudio or Jupyter IRKernel, use q.l(.)(.) instead of q(.)(.)
+> location(C) # location of this distribution is 1.
+[1] 1
+> location(C) <- 2 # location of this distribution is now 2.
+> is(C,"Td") # no
+[1] FALSE
+> C0 <- Cauchy() # standard, i.e. location = 0, scale = 1
+> is(C0,"Td") # yes
+[1] TRUE
+> as(C0,"Td") 
+Distribution Object of Class: Td
+ df: 1
+ ncp: 0
+> 
+> 
+> 
+> cleanEx()
+> nameEx("CauchyParameter-class")
+> ### * CauchyParameter-class
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: CauchyParameter-class
+> ### Title: Class "CauchyParameter"
+> ### Aliases: CauchyParameter-class initialize,CauchyParameter-method
+> ### Keywords: distribution
+> 
+> ### ** Examples
+> 
+> W <- new("CauchyParameter",location=1,scale=1)
+> location(W) # location of this distribution is 1.
+[1] 1
+> location(W) <- 2 # location of this distribution is now 2.
+> 
+> 
+> 
+> cleanEx()
+> nameEx("Chisq-class")
+> ### * Chisq-class
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: Chisq-class
+> ### Title: Class "Chisq"
+> ### Aliases: Chisq-class Chisq initialize,Chisq-method
+> ### Keywords: distribution
+> 
+> ### ** Examples
+> 
+> C <- Chisq(df = 1, ncp = 1) # C is a chi-squared distribution with df=1 and ncp=1.
+> r(C)(1) # one random number generated from this distribution, e.g. 0.2557184
+[1] 3.052466
+> d(C)(1) # Density of this distribution is 0.2264666 for x = 1.
+[1] 0.2264666
+> p(C)(1) # Probability that x < 1 is 0.4772499.
+[1] 0.4772499
+> q(C)(.1) # Probability that x < 0.04270125 is 0.1.
+[1] 0.04270125
+> ## in RStudio or Jupyter IRKernel, use q.l(.)(.) instead of q(.)(.)
+> df(C) # df of this distribution is 1.
+[1] 1
+> df(C) <- 2 # df of this distribution is now 2.
+> is(C, "Gammad") # no
+[1] FALSE
+> C0 <- Chisq() # default: Chisq(df=1,ncp=0)
+> is(C0, "Gammad") # yes
+[1] TRUE
+> as(C0,"Gammad")
+Distribution Object of Class: Gammad
+ shape: 0.5
+ scale: 2
+> 
+> 
+> 
+> cleanEx()
+> nameEx("ChisqParameter-class")
+> ### * ChisqParameter-class
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: ChisqParameter-class
+> ### Title: Class "ChisqParameter"
+> ### Aliases: ChisqParameter-class initialize,ChisqParameter-method
+> ### Keywords: distribution
+> 
+> ### ** Examples
+> 
+> W <- new("ChisqParameter",df=1,ncp=1)
+> ncp(W) # ncp of this distribution is 1.
+[1] 1
+> ncp(W) <- 2 # ncp of this distribution is now 2.
+> 
+> 
+> 
+> cleanEx()
+> nameEx("CompoundDistribution-class")
+> ### * CompoundDistribution-class
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: CompoundDistribution-class
+> ### Title: Class "CompoundDistribution"
+> ### Aliases: CompoundDistribution-class NumbOfSummandsDistr SummandsDistr
+> ###   NumbOfSummandsDistr-methods SummandsDistr-methods
+> ###   NumbOfSummandsDistr,CompoundDistribution-method
+> ###   SummandsDistr,CompoundDistribution-method
+> ###   coerce,CompoundDistribution,UnivarLebDecDistribution-method
+> ###   UnivDistrListOrDistribution-class
+> ### Keywords: distribution
+> 
+> ### ** Examples
+> 
+> CP <- CompoundDistribution(Pois(),Norm())
+> CP
+An object of class "CompoundDistribution"
+
+ The frequency distribution is:
+Distribution Object of Class: Pois
+lambda: 1
+ The summands distribution is/are:
+Distribution Object of Class: Norm
+mean: 0
+sd: 1
+ 
+This Distribution is:
+An object of class "UnivarLebDecDistribution"
+--- a Lebesgue decomposed distribution:
+
+   Its discrete part (with weight 0.368000) is a
+Distribution Object of Class: Dirac
+location: 0
+This part is accessible with 'discretePart(<obj>)'.
+
+   Its absolutely continuous part (with weight 0.632000) is a
+Distribution Object of Class: AbscontDistribution
+This part is accessible with 'acPart(<obj>)'.
+Warning in (new("standardGeneric", .Data = function (object)  :
+  arithmetics on distributions are understood as operations on r.v.'s
+see 'distrARITH()'; for switching off this warning see '?distroptions'
+> p(CP)(0.3)          
+[1] 0.7480891
+> plot(CP)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("CompoundDistribution")
+> ### * CompoundDistribution
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: CompoundDistribution
+> ### Title: Generating function for Class "CompoundDistribution"
+> ### Aliases: CompoundDistribution
+> ### Keywords: distribution list
+> 
+> ### ** Examples
+> 
+> CP0 <- CompoundDistribution(Pois(), Norm())
+> CP0
+An object of class "CompoundDistribution"
+
+ The frequency distribution is:
+Distribution Object of Class: Pois
+lambda: 1
+ The summands distribution is/are:
+Distribution Object of Class: Norm
+mean: 0
+sd: 1
+ 
+This Distribution is:
+An object of class "UnivarLebDecDistribution"
+--- a Lebesgue decomposed distribution:
+
+   Its discrete part (with weight 0.368000) is a
+Distribution Object of Class: Dirac
+location: 0
+This part is accessible with 'discretePart(<obj>)'.
+
+   Its absolutely continuous part (with weight 0.632000) is a
+Distribution Object of Class: AbscontDistribution
+This part is accessible with 'acPart(<obj>)'.
+Warning in (new("standardGeneric", .Data = function (object)  :
+  arithmetics on distributions are understood as operations on r.v.'s
+see 'distrARITH()'; for switching off this warning see '?distroptions'
+> CP1 <- CompoundDistribution(DiscreteDistribution(supp = c(1,5,9,11),
++                             prob = dbinom(0:3, size = 3,prob = 0.3)),Norm())
+> CP1
+An object of class "CompoundDistribution"
+
+ The frequency distribution is:
+Distribution Object of Class: DiscreteDistribution
+ The summands distribution is/are:
+Distribution Object of Class: Norm
+mean: 0
+sd: 1
+ 
+This Distribution is:
+Distribution Object of Class: AbscontDistribution
+Warning in (new("standardGeneric", .Data = function (object)  :
+  arithmetics on distributions are understood as operations on r.v.'s
+see 'distrARITH()'; for switching off this warning see '?distroptions'
+> UL <- UnivarDistrList(Norm(), Binom(10,0.3), Chisq(df=4), Norm(),
++                       Binom(10,0.3), Chisq(df=4), Norm(), Binom(10,0.3),
++                       Chisq(df=4), Td(5), Td(10))
+> CP2 <- CompoundDistribution(DiscreteDistribution(supp = c(1,5,9,11),
++                       prob = dbinom(0:3, size = 3, prob = 0.3)),UL)
+> plot(CP2)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("ConvPow")
+> ### * ConvPow
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: convpow-methods
+> ### Title: Distribution of the sum of univariate i.i.d r.v's
+> ### Aliases: convpow convpow-methods convpow,AcDcLcDistribution-method
+> ###   convpow,AbscontDistribution-method convpow,LatticeDistribution-method
+> ###   convpow,DiscreteDistribution-method convpow,AcDcLcDistribution-method
+> ###   convpow,Norm-method convpow,Binom-method convpow,Nbinom-method
+> ###   convpow,ExpOrGammaOrChisq-method convpow,Cauchy-method
+> ###   convpow,Pois-method convpow,Dirac-method
+> ### Keywords: distribution
+> 
+> ### ** Examples
+> 
+> convpow(Exp()+Pois(),4)
+Distribution Object of Class: AbscontDistribution
+Warning in (new("standardGeneric", .Data = function (object)  :
+  arithmetics on distributions are understood as operations on r.v.'s
+see 'distrARITH()'; for switching off this warning see '?distroptions'
+> 
+> 
+> 
+> cleanEx()
+> nameEx("DExp-class")
+> ### * DExp-class
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: DExp-class
+> ### Title: Class "DExp"
+> ### Aliases: DExp-class DExp Laplace DoubleExponential
+> ###   initialize,DExp-method
+> ### Keywords: distribution
+> 
+> ### ** Examples
+> 
+> D <- DExp(rate = 1) # D is a Laplace distribution with rate = 1.
+> r(D)(1) # one random number generated from this distribution, e.g. 0.4190765
+[1] -1.181643
+> d(D)(1) # Density of this distribution is 0.1839397 for x = 1.
+[1] 0.1839397
+> p(D)(1) # Probability that x < 1 is 0.8160603.
+[1] 0.8160603
+> q(D)(.1) # Probability that x < -1.609438 is 0.1.
+[1] -1.609438
+> ## in RStudio or Jupyter IRKernel, use q.l(.)(.) instead of q(.)(.)
+> rate(D) # rate of this distribution is 1.
+[1] 1
+> rate(D) <- 2 # rate of this distribution is now 2.
+> 3*D ###  still a DExp -distribution
+Distribution Object of Class: DExp
+ rate: 0.666666666666667
+Warning in (new("standardGeneric", .Data = function (object)  :
+  arithmetics on distributions are understood as operations on r.v.'s
+see 'distrARITH()'; for switching off this warning see '?distroptions'
+> 
+> 
+> 
+> cleanEx()
+> nameEx("Dirac-class")
+> ### * Dirac-class
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: Dirac-class
+> ### Title: Class "Dirac"
+> ### Aliases: Dirac-class Dirac initialize,Dirac-method log,Dirac-method
+> ###   Math,Dirac-method
+> ### Keywords: distribution
+> 
+> ### ** Examples
+> 
+> D <- Dirac(location = 0) # D is a Dirac distribution with location=0.
+> r(D)(1)
+[1] 0
+> # r(D)(1) generates a pseudo-random-number according to a Dirac
+> # distribution with location = 0,
+> # which of course will take 0 as value almost surely.
+> d(D)(0) # Density of this distribution is 1 for x = 0.
+[1] 1
+> p(D)(1) # Probability that x < 1 is 1.
+[1] 1
+> q(D)(.1) # q(D)(x) is always 0 (= location).
+[1] 0
+> ## in RStudio or Jupyter IRKernel, use q.l(.)(.) instead of q(.)(.)
+> location(D) # location of this distribution is 0.
+[1] 0
+> location(D) <- 2 # location of this distribution is now 2.
+> 
+> 
+> 
+> cleanEx()
+> nameEx("DiracParameter-class")
+> ### * DiracParameter-class
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: DiracParameter-class
+> ### Title: Class "DiracParameter"
+> ### Aliases: DiracParameter-class initialize,DiracParameter-method
+> ### Keywords: distribution
+> 
+> ### ** Examples
+> 
+> W <- new("DiracParameter",location=1)
+> location(W) # location of this distribution is 1.
+[1] 1
+> location(W) <- 2 # location of this distribution is now 2.
+> 
+> 
+> 
+> cleanEx()
+> nameEx("DiscreteDistribution-class")
+> ### * DiscreteDistribution-class
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: DiscreteDistribution-class
+> ### Title: Class "DiscreteDistribution"
+> ### Aliases: DiscreteDistribution-class AffLinDiscreteDistribution-class
+> ###   initialize,DiscreteDistribution-method
+> ###   initialize,AffLinDiscreteDistribution-method
+> ###   sqrt,DiscreteDistribution-method
+> ###   coerce,DiscreteDistribution,LatticeDistribution-method
+> ###   coerce,AffLinDiscreteDistribution,LatticeDistribution-method
+> ### Keywords: distribution
+> 
+> ### ** Examples
+> 
+> # Dirac-measure at 0
+> D1 <- DiscreteDistribution(supp = 0)
+> support(D1)
+[1] 0
+> 
+> # simple discrete distribution
+> D2 <- DiscreteDistribution(supp = c(1:5), prob = c(0.1, 0.2, 0.3, 0.2, 0.2))
+> plot(D2)
+> (pp <- p(D2)(support(D2)))
+[1] 0.1 0.3 0.6 0.8 1.0
+> p(D2)(support(D2)-1e-5)
+[1] 0.0 0.1 0.3 0.6 0.8
+> p(D2)(support(D2)+1e-5)
+[1] 0.1 0.3 0.6 0.8 1.0
+> p.l(D2)(support(D2))
+[1] 0.0 0.1 0.3 0.6 0.8
+> p.l(D2)(support(D2)-1e-5)
+[1] 0.0 0.1 0.3 0.6 0.8
+> p.l(D2)(support(D2)+1e-5)
+[1] 0.1 0.3 0.6 0.8 1.0
+> q(D2)(pp)
+[1] 1 2 3 4 5
+> q(D2)(pp-1e-5)
+[1] 1 2 3 4 5
+> q(D2)(pp+1e-5)
+Warning in q(D2)(pp + 1e-05) : q method of D2 produced NaN's 
+[1]   2   3   4   5 NaN
+> ## in RStudio or Jupyter IRKernel, use q.l(.)(.) instead of q(.)(.)
+> q.r(D2)(pp)
+[1] 2 3 4 5 5
+> q.r(D2)(pp-1e-5)
+[1] 1 2 3 4 5
+> q.r(D2)(pp+1e-5)
+Warning in q.r(D2)(pp + 1e-05) : NaN's produced
+[1]   2   3   4   5 NaN
+> 
+> 
+> 
+> cleanEx()
+> nameEx("DiscreteDistribution")
+> ### * DiscreteDistribution
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: DiscreteDistribution
+> ### Title: Generating function "DiscreteDistribution"
+> ### Aliases: DiscreteDistribution
+> ### Keywords: distribution
+> 
+> ### ** Examples
+> 
+> # Dirac-measure at 0
+> D1 <- DiscreteDistribution(supp = 0)
+> D1
+Distribution Object of Class: DiscreteDistribution
+> # simple discrete distribution
+> D2 <- DiscreteDistribution(supp = c(1:5), prob = c(0.1, 0.2, 0.3, 0.2, 0.2))
+> D2
+Distribution Object of Class: DiscreteDistribution
+> 
+> plot(D2)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("DistrList-class")
+> ### * DistrList-class
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: DistrList-class
+> ### Title: List of distributions
+> ### Aliases: DistrList-class coerce,Distribution,DistrList-method
+> ###   show,DistrList-method
+> ### Keywords: distribution list
+> 
+> ### ** Examples
+> 
+> (DL <- new("DistrList", list(Norm(), Exp())))
+An object of class "DistrList"
+ [[1]] Distribution Object of Class: Norm
+       :mean: 0
+       :sd: 1
+ [[2]] Distribution Object of Class: Exp
+       :rate: 1
+> plot(DL)
+> as(Norm(), "DistrList")
+An object of class "DistrList"
+ [[1]] Distribution Object of Class: Norm
+       :mean: 0
+       :sd: 1
+> 
+> 
+> 
+> cleanEx()
+> nameEx("DistrList")
+> ### * DistrList
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: DistrList
+> ### Title: Generating function for DistrList-class
+> ### Aliases: DistrList
+> ### Keywords: distribution list
+> 
+> ### ** Examples
+> 
+> (DL <- DistrList(Norm(), Exp(), Pois()))
+An object of class "DistrList"
+ [[1]] Distribution Object of Class: Norm
+       :mean: 0
+       :sd: 1
+ [[2]] Distribution Object of Class: Exp
+       :rate: 1
+ [[3]] Distribution Object of Class: Pois
+       :lambda: 1
+> plot(DL)
+> as(Norm(), "DistrList")
+An object of class "DistrList"
+ [[1]] Distribution Object of Class: Norm
+       :mean: 0
+       :sd: 1
+> 
+> ## The function is currently defined as
+> function(...){ 
++     new("DistrList", list(...)) 
++ }
+function (...) 
+{
+    new("DistrList", list(...))
+}
+> 
+> 
+> 
+> cleanEx()
+> nameEx("DistrSymmList-class")
+> ### * DistrSymmList-class
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: DistrSymmList-class
+> ### Title: List of Symmetries for a List of Distributions
+> ### Aliases: DistrSymmList-class
+> ### Keywords: classes distribution
+> 
+> ### ** Examples
+> 
+> new("DistrSymmList", list(NoSymmetry(), SphericalSymmetry(SymmCenter = 1), 
++                           EllipticalSymmetry(SymmCenter = 2)))
+An object of class "DistrSymmList"
+[[1]]
+type of symmetry:	non-symmetric distribution
+NULL
+
+[[2]]
+type of symmetry:	spherically symmetric distribution
+center of symmetry:
+[1] 1
+
+[[3]]
+type of symmetry:	elliptically symmetric distribution
+center of symmetry:
+[1] 2
+
+> 
+> 
+> 
+> cleanEx()
+> nameEx("DistrSymmList")
+> ### * DistrSymmList
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: DistrSymmList
+> ### Title: Generating function for DistrSymmList-class
+> ### Aliases: DistrSymmList
+> ### Keywords: distribution
+> 
+> ### ** Examples
+> 
+> DistrSymmList(NoSymmetry(), SphericalSymmetry(SymmCenter = 1), 
++               EllipticalSymmetry(SymmCenter = 2))
+An object of class "DistrSymmList"
+[[1]]
+type of symmetry:	non-symmetric distribution
+NULL
+
+[[2]]
+type of symmetry:	spherically symmetric distribution
+center of symmetry:
+[1] 1
+
+[[3]]
+type of symmetry:	elliptically symmetric distribution
+center of symmetry:
+[1] 2
+
+> 
+> ## The function is currently defined as
+> function (...){
++     new("DistrSymmList", list(...))
++ }
+function (...) 
+{
+    new("DistrSymmList", list(...))
+}
+> 
+> 
+> 
+> cleanEx()
+> nameEx("EllipticalSymmetry-class")
+> ### * EllipticalSymmetry-class
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: EllipticalSymmetry-class
+> ### Title: Class for Elliptically Symmetric Distributions
+> ### Aliases: EllipticalSymmetry-class
+> ### Keywords: classes distribution
+> 
+> ### ** Examples
+> 
+> new("EllipticalSymmetry")
+type of symmetry:	elliptically symmetric distribution
+center of symmetry:
+numeric(0)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("EllipticalSymmetry")
+> ### * EllipticalSymmetry
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: EllipticalSymmetry
+> ### Title: Generating function for EllipticalSymmetry-class
+> ### Aliases: EllipticalSymmetry
+> ### Keywords: distribution
+> 
+> ### ** Examples
+> 
+> EllipticalSymmetry()
+type of symmetry:	elliptically symmetric distribution
+center of symmetry:
+[1] 0
+> 
+> ## The function is currently defined as
+> function(SymmCenter = 0){ 
++     new("EllipticalSymmetry", SymmCenter = SymmCenter) 
++ }
+function (SymmCenter = 0) 
+{
+    new("EllipticalSymmetry", SymmCenter = SymmCenter)
+}
+> 
+> 
+> 
+> cleanEx()
+> nameEx("EmpiricalDistribution")
+> ### * EmpiricalDistribution
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: EmpiricalDistribution
+> ### Title: Generating function "EmpiricalDistribution"
+> ### Aliases: EmpiricalDistribution
+> ### Keywords: distribution
+> 
+> ### ** Examples
+> 
+> x <- rnorm(20)
+> D1 <- EmpiricalDistribution(data = x)
+> D1
+Distribution Object of Class: DiscreteDistribution
+> 
+> plot(D1)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("EuclideanSpace-class")
+> ### * EuclideanSpace-class
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: EuclideanSpace-class
+> ### Title: Class "EuclideanSpace"
+> ### Aliases: EuclideanSpace EuclideanSpace-class
+> ###   initialize,EuclideanSpace-method
+> ### Keywords: distribution
+> 
+> ### ** Examples
+> 
+> E <- EuclideanSpace(dimension = 2) 
+> dimension(E) # The dimension of this space is 2.
+[1] 2
+> dimension(E) <- 3 # The dimension of this space is now 3.
+> liesIn(E,c(0,0,0)) # TRUE
+[1] TRUE
+> liesIn(E,c(0,0)) # FALSE
+[1] FALSE
+> 
+> 
+> 
+> cleanEx()
+> nameEx("Exp-class")
+> ### * Exp-class
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: Exp-class
+> ### Title: Class "Exp"
+> ### Aliases: Exp-class Exp initialize,Exp-method
+> ### Keywords: distribution
+> 
+> ### ** Examples
+> 
+> E <- Exp(rate = 1) # E is a exp distribution with rate = 1.
+> r(E)(1) # one random number generated from this distribution, e.g. 0.4190765
+[1] 0.7551818
+> d(E)(1) # Density of this distribution is 0.3678794 for x = 1.
+[1] 0.3678794
+> p(E)(1) # Probability that x < 1 is 0.6321206.
+[1] 0.6321206
+> q(E)(.1) # Probability that x < 0.1053605 is 0.1.
+[1] 0.1053605
+> ## in RStudio or Jupyter IRKernel, use q.l(.)(.) instead of q(.)(.)
+> rate(E) # rate of this distribution is 1.
+[1] 1
+> rate(E) <- 2 # rate of this distribution is now 2.
+> is(E, "Gammad") # yes
+[1] TRUE
+> as(E,"Gammad")
+Distribution Object of Class: Gammad
+ shape: 1
+ scale: 0.5
+> is(E, "Weibull") 
+[1] TRUE
+> E+E+E ###  a Gammad -distribution
+Distribution Object of Class: Gammad
+ shape: 3
+ scale: 0.5
+Warning in (new("standardGeneric", .Data = function (object)  :
+  arithmetics on distributions are understood as operations on r.v.'s
+see 'distrARITH()'; for switching off this warning see '?distroptions'
+> 2*E+Gammad(scale=1)
+Distribution Object of Class: Gammad
+ shape: 2
+ scale: 1
+Warning in (new("standardGeneric", .Data = function (object)  :
+  arithmetics on distributions are understood as operations on r.v.'s
+see 'distrARITH()'; for switching off this warning see '?distroptions'
+> 
+> 
+> 
+> cleanEx()
+> nameEx("ExpOrGammaOrChisq-class")
+> ### * ExpOrGammaOrChisq-class
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: ExpOrGammaOrChisq-class
+> ### Title: Class "ExpOrGammaOrChisq"
+> ### Aliases: ExpOrGammaOrChisq-class
+> ### Keywords: internal distribution
+> 
+> ### ** Examples
+> 
+> ## class only used internally
+> 
+> 
+> 
+> cleanEx()
+> nameEx("ExpParameter-class")
+> ### * ExpParameter-class
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: ExpParameter-class
+> ### Title: Class "ExpParameter"
+> ### Aliases: ExpParameter-class initialize,ExpParameter-method
+> ### Keywords: distribution
+> 
+> ### ** Examples
+> 
+> W <- new("ExpParameter", rate = 1)
+> rate(W) # rate of this distribution is 1.
+[1] 1
+> rate(W) <- 2 # rate of this distribution is now 2.
+> 
+> 
+> 
+> cleanEx()
+> nameEx("FParameter-class")
+> ### * FParameter-class
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: FParameter-class
+> ### Title: Class "FParameter"
+> ### Aliases: FParameter-class initialize,FParameter-method
+> ### Keywords: distribution
+> 
+> ### ** Examples
+> 
+> W <- new("FParameter", df1 = 1, df2 = 1, ncp = 0)
+> df2(W) # df2 of this distribution is 1.
+[1] 1
+> df2(W) <- 2 # df2 of this distribution is now 2.
+> 
+> 
+> 
+> cleanEx()
+> nameEx("Fd-class")
+> ### * Fd-class
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: Fd-class
+> ### Title: Class "Fd"
+> ### Aliases: Fd-class Fd initialize,Fd-method
+> ### Keywords: distribution
+> 
+> ### ** Examples
+> 
+> F <- Fd(df1 = 1, df2 = 1) # F is a F distribution with df=1 and df2=1.
+> r(F)(1) # one random number generated from this distribution, e.g. 29.37863
+[1] 0.1781142
+> d(F)(1) # Density of this distribution is 0.1591549 for x=1 .
+[1] 0.1591549
+> p(F)(1) # Probability that x<1 is 0.5.
+[1] 0.5
+> q(F)(.1) # Probability that x<0.02508563 is 0.1.
+[1] 0.02508563
+> ## in RStudio or Jupyter IRKernel, use q.l(.)(.) instead of q(.)(.)
+> df1(F) # df1 of this distribution is 1.
+[1] 1
+> df1(F) <- 2 # df1 of this distribution is now 2.
+> Fn <- Fd(df1 = 1, df2 = 1, ncp = 0.5) 
+>   # Fn is a F distribution with df=1, df2=1 and ncp =0.5.
+> d(Fn)(1) ## from R 2.3.0 on ncp no longer ignored...
+[1] 0.1576536
+> 
+> 
+> 
+> cleanEx()
+> nameEx("GammaParameter-class")
+> ### * GammaParameter-class
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: GammaParameter-class
+> ### Title: Class "GammaParameter"
+> ### Aliases: GammaParameter-class initialize,GammaParameter-method
+> ### Keywords: distribution
+> 
+> ### ** Examples
+> 
+> W <- new("GammaParameter",scale=1,shape=1)
+> shape(W) # shape of this distribution is 1.
+[1] 1
+> shape(W) <- 2 # shape of this distribution is now 2.
+> 
+> 
+> 
+> cleanEx()
+> nameEx("Gammad-class")
+> ### * Gammad-class
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: Gammad-class
+> ### Title: Class "Gammad"
+> ### Aliases: Gammad-class Gammad initialize,Gammad-method
+> ### Keywords: distribution
+> 
+> ### ** Examples
+> 
+> G <- Gammad(scale=1,shape=1) # G is a gamma distribution with scale=1 and shape=1.
+> r(G)(1) # one random number generated from this distribution, e.g. 0.1304441
+[1] 0.1551414
+> d(G)(1) # Density of this distribution is 0.3678794 for x=1.
+[1] 0.3678794
+> p(G)(1) # Probability that x<1 is 0.6321206.
+[1] 0.6321206
+> q(G)(.1) # Probability that x<0.1053605 is 0.1.
+[1] 0.1053605
+> ## in RStudio or Jupyter IRKernel, use q.l(.)(.) instead of q(.)(.)
+> scale(G) # scale of this distribution is 1.
+[1] 1
+> scale(G) <- 2 # scale of this distribution is now 2.
+> 
+> 
+> 
+> cleanEx()
+> nameEx("Geom-class")
+> ### * Geom-class
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: Geom-class
+> ### Title: Class "Geom"
+> ### Aliases: Geom-class Geom initialize,Geom-method
+> ### Keywords: distribution
+> 
+> ### ** Examples
+> 
+> G <- Geom(prob = 0.5) # G is a geometric distribution with prob = 0.5.
+> r(G)(1) # one random number generated from this distribution, e.g. 0
+[1] 0
+> d(G)(1) # Density of this distribution is 0.25 for x = 1.
+[1] 0.25
+> p(G)(1) # Probability that x<1 is 0.75.
+[1] 0.75
+> q(G)(.1) # x = 0 is the smallest value x such that p(G)(x) >= 0.1.
+[1] 0
+> ## in RStudio or Jupyter IRKernel, use q.l(.)(.) instead of q(.)(.)
+> prob(G) # prob of this distribution is 0.5.
+[1] 0.5
+> prob(G) <- 0.6 # prob of this distribution is now 0.6.
+> as(G,"Nbinom")
+Distribution Object of Class: Nbinom
+ size: 1
+ prob: 0.6
+> G+G+G
+Distribution Object of Class: Nbinom
+ size: 3
+ prob: 0.6
+Warning in (new("standardGeneric", .Data = function (object)  :
+  arithmetics on distributions are understood as operations on r.v.'s
+see 'distrARITH()'; for switching off this warning see '?distroptions'
+> 
+> 
+> 
+> cleanEx()
+> nameEx("Huberize-methods")
+> ### * Huberize-methods
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: Huberize-methods
+> ### Title: Methods for function Huberize in Package 'distr'
+> ### Aliases: Huberize-methods Huberize Huberize,AcDcLcDistribution-method
+> ### Keywords: distribution methods
+> 
+> ### ** Examples
+> 
+> Hub <- Huberize(Norm(),lower=-1,upper=2)
+> Hub 
+An object of class "AffLinUnivarLebDecDistribution"
+ --- a Lebesgue decomposed distribution:
+
+    Its discrete part (with weight 0.181000) is a
+ Distribution Object of Class: AffLinDiscreteDistribution
+ This part is accessible with 'discretePart(<obj>)'.
+
+    Its absolutely continuous part (with weight 0.819000) is a
+ Distribution Object of Class: AffLinAbscontDistribution
+ This part is accessible with 'acPart(<obj>)'.
+Warning in (new("standardGeneric", .Data = function (object)  :
+  arithmetics on distributions are understood as operations on r.v.'s
+see 'distrARITH()'; for switching off this warning see '?distroptions'
+> plot(Hub)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("Hyper-class")
+> ### * Hyper-class
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: Hyper-class
+> ### Title: Class "Hyper"
+> ### Aliases: Hyper-class Hyper initialize,Hyper-method
+> ### Keywords: distribution
+> 
+> ### ** Examples
+> 
+> H <- Hyper(m=3,n=3,k=3) # H is a hypergeometric distribution with m=3,n=3,k=3.
+> r(H)(1) # one random number generated from this distribution, e.g. 2
+[1] 2
+> d(H)(1) # Density of this distribution is  0.45 for x=1.
+[1] 0.45
+> p(H)(1) # Probability that x<1 is 0.5.
+[1] 0.5
+> q(H)(.1) # x=1 is the smallest value x such that p(H)(x)>=0.1.
+[1] 1
+> ## in RStudio or Jupyter IRKernel, use q.l(.)(.) instead of q(.)(.)
+> m(H) # m of this distribution is 3.
+[1] 3
+> m(H) <- 2 # m of this distribution is now 2.
+> 
+> 
+> 
+> cleanEx()
+> nameEx("HyperParameter-class")
+> ### * HyperParameter-class
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: HyperParameter-class
+> ### Title: Class "HyperParameter"
+> ### Aliases: HyperParameter-class initialize,HyperParameter-method
+> ### Keywords: distribution
+> 
+> ### ** Examples
+> 
+> W <- new("HyperParameter",k=3, m=3, n=3)
+> m(W) # m of this distribution is 3.
+[1] 3
+> m(W) <- 2 # m of this distribution is now 2.
+> 
+> 
+> 
+> cleanEx()
+> nameEx("Lattice-class")
+> ### * Lattice-class
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: Lattice-class
+> ### Title: Class "Lattice"
+> ### Aliases: Lattice-class Lattice
+> ### Keywords: distribution
+> 
+> ### ** Examples
+> 
+> L <- Lattice(pivot = 0, width = 1, Length = Inf, name = "the Naturals")
+> name(L)
+[1] "the Naturals"
+> pivot(L) <- 1 ### now starting from 1
+> 
+> 
+> 
+> cleanEx()
+> nameEx("LatticeDistribution-class")
+> ### * LatticeDistribution-class
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: LatticeDistribution-class
+> ### Title: Class "LatticeDistribution"
+> ### Aliases: AffLinLatticeDistribution-class LatticeDistribution-class
+> ###   lattice lattice-method lattice,LatticeDistribution-method
+> ###   initialize,LatticeDistribution-method
+> ###   initialize,AffLinLatticeDistribution-method
+> ###   sqrt,LatticeDistribution-method
+> ###   coerce,LatticeDistribution,DiscreteDistribution-method
+> ###   coerce,AffLinLatticeDistribution,AffLinDiscreteDistribution-method
+> ### Keywords: distribution
+> 
+> ### ** Examples
+> 
+> B <- Binom(prob = 0.1,size = 10) # B is a Binomial distribution w/ prob=0.1 and size=10.
+> P <- Pois(lambda = 1) # P is a Poisson distribution with lambda = 1.
+> D1 <- B+1 # a new Lattice distributions with exact slots d, p, q
+> D2 <- D1*3 # a new Lattice distributions with exact slots d, p, q
+> D3 <- B+P # a new Lattice distributions with approximated slots d, p, q
+> D4 <- D1+P # a new Lattice distributions with approximated slots d, p, q
+> support(D4) # the (approximated) support of this distribution is 1, 2, ..., 21
+ [1]  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20
+> r(D4)(1) # one random number generated from this distribution, e.g. 4
+[1] 3
+> d(D4)(1) # The (approximated) density for x=1 is 0.1282716.
+[1] 0.1282716
+> p(D4)(1) # The (approximated) probability that x<=1 is 0.1282716.
+[1] 0.1282716
+> q(D4)(.5) # The (approximated) 50 percent quantile is 3.
+[1] 3
+> ## in RStudio or Jupyter IRKernel, use q.l(.)(.) instead of q(.)(.)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("LatticeDistribution")
+> ### * LatticeDistribution
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: LatticeDistribution
+> ### Title: Class "LatticeDistribution"
+> ### Aliases: LatticeDistribution
+> ### Keywords: distribution
+> 
+> ### ** Examples
+> 
+>   LatticeDistribution(DiscreteDistribution = DiscreteDistribution(supp =
++                        c(4,3,2), prob=c(0.3,0.1,0.6)))
+Distribution Object of Class: LatticeDistribution
+>   LatticeDistribution(supp = c(4,3,2))
+Distribution Object of Class: LatticeDistribution
+> 
+> 
+> 
+> cleanEx()
+> nameEx("Lnorm-class")
+> ### * Lnorm-class
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: Lnorm-class
+> ### Title: Class "Lnorm"
+> ### Aliases: Lnorm-class Lnorm initialize,Lnorm-method
+> ### Keywords: distribution
+> 
+> ### ** Examples
+> 
+> L <- Lnorm(meanlog=1,sdlog=1) # L is a lnorm distribution with mean=1 and sd=1.
+> r(L)(1) # one random number generated from this distribution, e.g. 3.608011
+[1] 1.452878
+> d(L)(1) # Density of this distribution is 0.2419707 for x=1.
+[1] 0.2419707
+> p(L)(1) # Probability that x<1 is 0.1586553.
+[1] 0.1586553
+> q(L)(.1) # Probability that x<0.754612 is 0.1.
+[1] 0.754612
+> ## in RStudio or Jupyter IRKernel, use q.l(.)(.) instead of q(.)(.)
+> meanlog(L) # meanlog of this distribution is 1.
+[1] 1
+> meanlog(L) <- 2 # meanlog of this distribution is now 2.
+> 
+> 
+> 
+> cleanEx()
+> nameEx("LnormParameter-class")
+> ### * LnormParameter-class
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: LnormParameter-class
+> ### Title: Class "LnormParameter"
+> ### Aliases: LnormParameter-class initialize,LnormParameter-method
+> ### Keywords: distribution
+> 
+> ### ** Examples
+> 
+> W <- new("LnormParameter",sdlog=1,meanlog=0)
+> meanlog(W) # meanlog of this distribution is 0.
+[1] 0
+> meanlog(W) <- 2 # meanlog of this distribution is now 2.
+> 
+> 
+> 
+> cleanEx()
+> nameEx("Logis-class")
+> ### * Logis-class
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: Logis-class
+> ### Title: Class "Logis"
+> ### Aliases: Logis-class Logis initialize,Logis-method
+> ### Keywords: distribution
+> 
+> ### ** Examples
+> 
+> L <- Logis(location = 1,scale = 1)
+> # L is a logistic distribution with  location = 1 and scale = 1.
+> r(L)(1) # one random number generated from this distribution, e.g. 5.87557
+[1] -0.01753073
+> d(L)(1) # Density of this distribution is 0.25 for x = 1.
+[1] 0.25
+> p(L)(1) # Probability that x < 1 is 0.5.
+[1] 0.5
+> q(L)(.1) # Probability that x < -1.197225 is 0.1.
+[1] -1.197225
+> ## in RStudio or Jupyter IRKernel, use q.l(.)(.) instead of q(.)(.)
+> location(L) # location of this distribution is 1.
+[1] 1
+> location(L) <- 2 # location of this distribution is now 2.
+> 
+> 
+> 
+> cleanEx()
+> nameEx("LogisParameter-class")
+> ### * LogisParameter-class
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: LogisParameter-class
+> ### Title: Class "LogisParameter"
+> ### Aliases: LogisParameter-class initialize,LogisParameter-method
+> ### Keywords: distribution
+> 
+> ### ** Examples
+> 
+> W <- new("LogisParameter",location=0,scale=1)
+> scale(W) # scale of this distribution is 1.
+[1] 1
+> scale(W) <- 2 # scale of this distribution is now 2.
+> 
+> 
+> 
+> cleanEx()
+> nameEx("MakeAbscontDistribution")
+> ### * MakeAbscontDistribution
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: makeAbscontDistribution
+> ### Title: "makeAbscontDistribution"
+> ### Aliases: makeAbscontDistribution
+> ### Keywords: distribution
+> 
+> ### ** Examples
+> 
+>   Hu <- Huberize(Norm(), -2,1)
+>   Hu
+An object of class "AffLinUnivarLebDecDistribution"
+ --- a Lebesgue decomposed distribution:
+
+    Its discrete part (with weight 0.181000) is a
+ Distribution Object of Class: AffLinDiscreteDistribution
+ This part is accessible with 'discretePart(<obj>)'.
+
+    Its absolutely continuous part (with weight 0.819000) is a
+ Distribution Object of Class: AffLinAbscontDistribution
+ This part is accessible with 'acPart(<obj>)'.
+Warning in (new("standardGeneric", .Data = function (object)  :
+  arithmetics on distributions are understood as operations on r.v.'s
+see 'distrARITH()'; for switching off this warning see '?distroptions'
+>   plot(Hu)
+>   Hu0 <- makeAbscontDistribution(Hu)
+Warning in .makeDNew(xx, dx, h = NULL, Cont = TRUE, standM = "integrate") :
+  'integrate()' threw an error ---result may be inaccurate.
+>   Hu0
+Distribution Object of Class: AbscontDistribution
+Warning in (new("standardGeneric", .Data = function (object)  :
+  arithmetics on distributions are understood as operations on r.v.'s
+see 'distrARITH()'; for switching off this warning see '?distroptions'
+Warning in (new("standardGeneric", .Data = function (object)  :
+  slots d,p,q have been filled using simulations; for switching off this warning see '?distroptions'
+>   plot(Hu0)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("MinMaximum-methods")
+> ### * MinMaximum-methods
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: Minimum-methods
+> ### Title: Methods for functions Minimum and Maximum in Package 'distr'
+> ### Aliases: Minimum-methods Minimum Maximum-methods Maximum
+> ###   Minimum,AbscontDistribution,AbscontDistribution-method
+> ###   Minimum,DiscreteDistribution,DiscreteDistribution-method
+> ###   Minimum,AbscontDistribution,Dirac-method
+> ###   Minimum,AcDcLcDistribution,AcDcLcDistribution-method
+> ###   Minimum,AbscontDistribution,numeric-method
+> ###   Minimum,DiscreteDistribution,numeric-method
+> ###   Minimum,AcDcLcDistribution,numeric-method
+> ###   Maximum,AcDcLcDistribution,AcDcLcDistribution-method
+> ###   Maximum,AcDcLcDistribution,numeric-method
+> ### Keywords: distribution methods
+> 
+> ### ** Examples
+> 
+> plot(Maximum(Unif(0,1), Minimum(Unif(0,1), Unif(0,1))))
+> plot(Minimum(Exp(4),4))
+> ## a sometimes lengthy example...
+> ## No test: 
+> plot(Minimum(Norm(),Pois()))
+> ## End(No test)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("Naturals-class")
+> ### * Naturals-class
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: Naturals-class
+> ### Title: Class "Naturals"
+> ### Aliases: Naturals Naturals-class initialize,Naturals-method
+> ### Keywords: distribution
+> 
+> ### ** Examples
+> 
+> N <- Naturals()
+> liesIn(N,1) # TRUE
+[1] TRUE
+> liesIn(N,c(0,1)) # FALSE
+[1] FALSE
+> liesIn(N,0.1) # FALSE
+[1] FALSE
+> 
+> 
+> 
+> cleanEx()
+> nameEx("Nbinom-class")
+> ### * Nbinom-class
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: Nbinom-class
+> ### Title: Class "Nbinom"
+> ### Aliases: Nbinom-class Nbinom initialize,Nbinom-method
+> ### Keywords: distribution
+> 
+> ### ** Examples
+> 
+> N <- Nbinom(prob = 0.5, size = 1) # N is a binomial distribution with prob=0.5 and size=1.
+> r(N)(1) # one random number generated from this distribution, e.g. 3
+[1] 1
+> d(N)(1) # Density of this distribution is  0.25 for x=1.
+[1] 0.25
+> p(N)(0.4) # Probability that x<0.4 is 0.5.
+[1] 0.5
+> q(N)(.1) # x=0 is the smallest value x such that p(B)(x)>=0.1.
+[1] 0
+> ## in RStudio or Jupyter IRKernel, use q.l(.)(.) instead of q(.)(.)
+> size(N) # size of this distribution is 1.
+[1] 1
+> size(N) <- 2 # size of this distribution is now 2.
+> 
+> 
+> 
+> cleanEx()
+> nameEx("NbinomParameter-class")
+> ### * NbinomParameter-class
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: NbinomParameter-class
+> ### Title: Class "NbinomParameter"
+> ### Aliases: NbinomParameter-class initialize,NbinomParameter-method
+> ### Keywords: distribution
+> 
+> ### ** Examples
+> 
+> W <- new("NbinomParameter",prob=0.5,size=1)
+> size(W) # size of this distribution is 1.
+[1] 1
+> size(W) <- 2 # size of this distribution is now 2.
+> 
+> 
+> 
+> cleanEx()
+> nameEx("NoSymmetry-class")
+> ### * NoSymmetry-class
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: NoSymmetry-class
+> ### Title: Class for Non-symmetric Distributions
+> ### Aliases: NoSymmetry-class
+> ### Keywords: classes distribution
+> 
+> ### ** Examples
+> 
+> new("NoSymmetry")
+type of symmetry:	non-symmetric distribution
+NULL
+> 
+> 
+> 
+> cleanEx()
+> nameEx("NoSymmetry")
+> ### * NoSymmetry
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: NoSymmetry
+> ### Title: Generating function for NoSymmetry-class
+> ### Aliases: NoSymmetry
+> ### Keywords: distribution
+> 
+> ### ** Examples
+> 
+> NoSymmetry()
+type of symmetry:	non-symmetric distribution
+NULL
+> 
+> ## The function is currently defined as
+> function(){ new("NoSymmetry") }
+function () 
+{
+    new("NoSymmetry")
+}
+> 
+> 
+> 
+> cleanEx()
+> nameEx("Norm-class")
+> ### * Norm-class
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: Norm-class
+> ### Title: Class "Norm"
+> ### Aliases: Norm-class Norm initialize,Norm-method
+> ### Keywords: distribution
+> 
+> ### ** Examples
+> 
+> N <- Norm(mean=1,sd=1) # N is a normal distribution with mean=1 and sd=1.
+> r(N)(1) # one random number generated from this distribution, e.g. 2.257783
+[1] 0.3735462
+> d(N)(1) # Density of this distribution is  0.3989423 for x=1.
+[1] 0.3989423
+> p(N)(1) # Probability that x<1 is 0.5.
+[1] 0.5
+> q(N)(.1) # Probability that x<-0.2815516 is 0.1.
+[1] -0.2815516
+> ## in RStudio or Jupyter IRKernel, use q.l(.)(.) instead of q(.)(.)
+> mean(N) # mean of this distribution is 1.
+[1] 1
+> sd(N) <- 2 # sd of this distribution is now 2.
+> M <- Norm() # M is a normal distribution with mean=0 and sd=1.
+> O <- M+N # O is a normal distribution with mean=1 (=1+0) and sd=sqrt(5) (=sqrt(2^2+1^2)).
+> 
+> 
+> 
+> cleanEx()
+> nameEx("NormParameter-class")
+> ### * NormParameter-class
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: NormParameter-class
+> ### Title: Class "NormParameter"
+> ### Aliases: NormParameter-class initialize,NormParameter-method
+> ### Keywords: distribution
+> 
+> ### ** Examples
+> 
+> W <- new("NormParameter", mean = 0, sd = 1)
+> sd(W) # sd of this distribution is 1.
+[1] 1
+> sd(W) <- 2 # sd of this distribution is now 2.
+> 
+> 
+> 
+> cleanEx()
+> nameEx("Pois-class")
+> ### * Pois-class
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: Pois-class
+> ### Title: Class "Pois"
+> ### Aliases: Pois-class Pois initialize,Pois-method
+> ### Keywords: distribution
+> 
+> ### ** Examples
+> 
+> P <- Pois(lambda = 1) # P is a Poisson distribution with lambda = 1.
+> r(P)(1) # one random number generated from this distribution, e.g. 1
+[1] 0
+> d(P)(1) # Density of this distribution is 0.3678794 for x = 1.
+[1] 0.3678794
+> p(P)(0.4) # Probability that x < 0.4 is 0.3678794.
+[1] 0.3678794
+> q(P)(.1) # x = 0 is the smallest value x such that p(B)(x) >= 0.1.
+[1] 0
+> ## in RStudio or Jupyter IRKernel, use q.l(.)(.) instead of q(.)(.)
+> lambda(P) # lambda of this distribution is 1.
+[1] 1
+> lambda(P) <- 2 # lambda of this distribution is now 2.
+> R <- Pois(lambda = 3) # R is a Poisson distribution with lambda = 2.
+> S <- P + R # R is a Poisson distribution with lambda = 5(=2+3).
+> 
+> 
+> 
+> cleanEx()
+> nameEx("PoisParameter-class")
+> ### * PoisParameter-class
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: PoisParameter-class
+> ### Title: Class "PoisParameter"
+> ### Aliases: PoisParameter-class initialize,PoisParameter-method
+> ### Keywords: distribution
+> 
+> ### ** Examples
+> 
+> W <- new("PoisParameter",lambda = 1)
+> lambda(W) # lambda of this distribution is 1.
+[1] 1
+> lambda(W) <- 2 # lambda of this distribution is now 2.
+> 
+> 
+> 
+> cleanEx()
+> nameEx("PosDefSymmMatrix-class")
+> ### * PosDefSymmMatrix-class
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: PosDefSymmMatrix-class
+> ### Title: Positive-[Semi-]definite, symmetric matrices
+> ### Aliases: PosDefSymmMatrix-class PosSemDefSymmMatrix-class
+> ### Keywords: classes array
+> 
+> ### ** Examples
+> 
+> new("PosDefSymmMatrix", diag(2))
+An object of class "PosDefSymmMatrix"
+     [,1] [,2]
+[1,]    1    0
+[2,]    0    1
+> 
+> 
+> 
+> cleanEx()
+> nameEx("PosDefSymmMatrix")
+> ### * PosDefSymmMatrix
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: PosDefSymmMatrix
+> ### Title: Generating functions for PosSemDefSymmMatrix-class resp.
+> ###   PosDefSymmMatrix-class
+> ### Aliases: PosDefSymmMatrix PosSemDefSymmMatrix
+> ### Keywords: array
+> 
+> ### ** Examples
+> 
+> PosSemDefSymmMatrix(1)
+An object of class "PosSemDefSymmMatrix"
+     [,1]
+[1,]    1
+> PosSemDefSymmMatrix(diag(2))
+An object of class "PosSemDefSymmMatrix"
+     [,1] [,2]
+[1,]    1    0
+[2,]    0    1
+> PosDefSymmMatrix(1)
+An object of class "PosDefSymmMatrix"
+     [,1]
+[1,]    1
+> PosDefSymmMatrix(diag(2))
+An object of class "PosDefSymmMatrix"
+     [,1] [,2]
+[1,]    1    0
+[2,]    0    1
+> 
+> 
+> 
+> cleanEx()
+> nameEx("Reals-class")
+> ### * Reals-class
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: Reals-class
+> ### Title: Class "Reals"
+> ### Aliases: Reals Reals-class initialize,Reals-method
+> ### Keywords: distribution
+> 
+> ### ** Examples
+> 
+> R <- Reals()
+> liesIn(R,c(0,0)) # FALSE
+[1] FALSE
+> 
+> 
+> 
+> cleanEx()
+> nameEx("RtoDPQ.LC")
+> ### * RtoDPQ.LC
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: RtoDPQ.LC
+> ### Title: Default procedure to fill slots d,p,q given r for Lebesgue
+> ###   decomposed distributions
+> ### Aliases: RtoDPQ.LC
+> ### Keywords: math distribution arith
+> 
+> ### ** Examples
+> 
+> rn2 <- function(n)ifelse(rbinom(n,1,0.3),rnorm(n)^2,rbinom(n,4,.3))
+> x <- RtoDPQ.LC(r = rn2, e = 4, n = 512)
+Warning in .makeDNew(dxy$x, dxy$y, standM = "int") :
+  'integrate()' threw an error ---result may be inaccurate.
+> plot(x)
+> # returns density, cumulative distribution and quantile function of
+> # squared standard normal distribution
+> d.discrete(x)(4)
+[1] 0.009477312
+> x2 <- RtoDPQ.LC(r = rn2, e = 5, n = 1024) # for a better result
+> plot(x2)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("RtoDPQ")
+> ### * RtoDPQ
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: RtoDPQ
+> ### Title: Default procedure to fill slots d,p,q given r for a.c.
+> ###   distributions
+> ### Aliases: RtoDPQ
+> ### Keywords: math distribution arith
+> 
+> ### ** Examples
+> 
+> rn2 <- function(n){rnorm(n)^2}
+> x <- RtoDPQ(r = rn2, e = 4, n = 512)
+Warning in .makeDNew(dxy$x, dxy$y, standM = "int") :
+  'integrate()' threw an error ---result may be inaccurate.
+> # returns density, cumulative distribution and quantile function of
+> # squared standard normal distribution
+> x$dfun(4)
+[1] 0.02970112
+> RtoDPQ(r = rn2, e = 5, n = 1024) # for a better result
+Warning in .makeDNew(dxy$x, dxy$y, standM = "int") :
+  'integrate()' threw an error ---result may be inaccurate.
+$dfun
+function(x, log = FALSE)
+                    {if (log)
+                          d0 <-    log(df1(x))-log(stand)
+                     else d0 <- df1(x) / stand
+                     return (d0)}
+<bytecode: 0x02f53030>
+<environment: 0x05f4acf8>
+
+$pfun
+function (q, lower.tail = TRUE, log.p = FALSE) 
+{
+    p0 <- if (lower.tail) 
+        (function (v) 
+        .approxfun(x, y, v, method, yleft, yright, f))(q)
+    else 1 - (function (v) 
+    .approxfun(x, y, v, method, yleft, yright, f))(q)
+    p0 <- if (log.p) 
+        log(p0) - log(nm)
+    else p0/nm
+    return(p0)
+}
+<environment: 0x0586e8f0>
+
+$qfun
+function (p, lower.tail = TRUE, log.p = FALSE) 
+{
+    if (log.p) 
+        p <- exp(p)
+    if (any((p < -.Machine$double.eps) | (p > 1 + .Machine$double.eps))) 
+        warning(gettextf("q method of %s produced NaN's ", .getObjName(1)))
+    i01 <- (-.Machine$double.eps <= p) & (p <= 1 + .Machine$double.eps)
+    p01 <- p[i01]
+    q0 <- p * 0
+    q0[!i01] <- NaN
+    q0[i01] <- if (lower.tail) 
+        q.l0(p01)
+    else q.l0(1 - p01)
+    return(as.numeric(q0))
+}
+<environment: 0x0580c3b0>
+
+> 
+> rp2 <- function(n){rpois(n, lambda = 1)^2}
+> x <- RtoDPQ.d(r = rp2, e = 5)
+> # returns density, cumulative distribution and quantile function of
+> # squared Poisson distribution with parameter lambda=1
+> 
+> 
+> 
+> cleanEx()
+> nameEx("RtoDPQ.d")
+> ### * RtoDPQ.d
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: RtoDPQ.d
+> ### Title: Default procedure to fill slots d,p,q given r for discrete
+> ###   distributions
+> ### Aliases: RtoDPQ.d
+> ### Keywords: math distribution arith
+> 
+> ### ** Examples
+> 
+> rn2 <- function(n){rnorm(n)^2}
+> x <- RtoDPQ(r = rn2, e = 4, n = 512)
+Warning in .makeDNew(dxy$x, dxy$y, standM = "int") :
+  'integrate()' threw an error ---result may be inaccurate.
+> # returns density, cumulative distribution and quantile function of
+> # squared standard  normal distribution
+> 
+> x$dfun(4)
+[1] 0.02970112
+> RtoDPQ(r = rn2, e = 5, n = 1024) # for a better result
+Warning in .makeDNew(dxy$x, dxy$y, standM = "int") :
+  'integrate()' threw an error ---result may be inaccurate.
+$dfun
+function(x, log = FALSE)
+                    {if (log)
+                          d0 <-    log(df1(x))-log(stand)
+                     else d0 <- df1(x) / stand
+                     return (d0)}
+<bytecode: 0x02f53030>
+<environment: 0x07f66dd0>
+
+$pfun
+function (q, lower.tail = TRUE, log.p = FALSE) 
+{
+    p0 <- if (lower.tail) 
+        (function (v) 
+        .approxfun(x, y, v, method, yleft, yright, f))(q)
+    else 1 - (function (v) 
+    .approxfun(x, y, v, method, yleft, yright, f))(q)
+    p0 <- if (log.p) 
+        log(p0) - log(nm)
+    else p0/nm
+    return(p0)
+}
+<environment: 0x086f2300>
+
+$qfun
+function (p, lower.tail = TRUE, log.p = FALSE) 
+{
+    if (log.p) 
+        p <- exp(p)
+    if (any((p < -.Machine$double.eps) | (p > 1 + .Machine$double.eps))) 
+        warning(gettextf("q method of %s produced NaN's ", .getObjName(1)))
+    i01 <- (-.Machine$double.eps <= p) & (p <= 1 + .Machine$double.eps)
+    p01 <- p[i01]
+    q0 <- p * 0
+    q0[!i01] <- NaN
+    q0[i01] <- if (lower.tail) 
+        q.l0(p01)
+    else q.l0(1 - p01)
+    return(as.numeric(q0))
+}
+<environment: 0x08c59f70>
+
+> 
+> rp2 <- function(n){rpois(n, lambda = 1)^2}
+> x <- RtoDPQ.d(r = rp2, e = 5)
+> # returns density, cumulative distribution and quantile function of
+> # squared Poisson distribution with parameter lambda=1
+> 
+> 
+> 
+> cleanEx()
+> nameEx("SphericalSymmetry-class")
+> ### * SphericalSymmetry-class
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: SphericalSymmetry-class
+> ### Title: Class for Spherical Symmetric Distributions
+> ### Aliases: SphericalSymmetry-class
+> ### Keywords: classes distribution
+> 
+> ### ** Examples
+> 
+> new("SphericalSymmetry")
+type of symmetry:	spherically symmetric distribution
+center of symmetry:
+numeric(0)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("SphericalSymmetry")
+> ### * SphericalSymmetry
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: SphericalSymmetry
+> ### Title: Generating function for SphericalSymmetry-class
+> ### Aliases: SphericalSymmetry
+> ### Keywords: distribution
+> 
+> ### ** Examples
+> 
+> SphericalSymmetry()
+type of symmetry:	spherically symmetric distribution
+center of symmetry:
+[1] 0
+> 
+> ## The function is currently defined as
+> function(SymmCenter = 0){ 
++     new("SphericalSymmetry", SymmCenter = SymmCenter) 
++ }
+function (SymmCenter = 0) 
+{
+    new("SphericalSymmetry", SymmCenter = SymmCenter)
+}
+> 
+> 
+> 
+> cleanEx()
+> nameEx("TParameter-class")
+> ### * TParameter-class
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: TParameter-class
+> ### Title: Class "TParameter"
+> ### Aliases: TParameter-class initialize,TParameter-method
+> ### Keywords: distribution
+> 
+> ### ** Examples
+> 
+> W <- new("TParameter",df=1, ncp = 0)
+> df(W) # df of this distribution is 1.
+[1] 1
+> df(W) <- 2 # df of this distribution is now 2.
+> 
+> 
+> 
+> cleanEx()
+> nameEx("Td-class")
+> ### * Td-class
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: Td-class
+> ### Title: Class "Td"
+> ### Aliases: Td-class Td initialize,Td-method
+> ### Keywords: distribution
+> 
+> ### ** Examples
+> 
+> T <- Td(df = 1) # T is a t distribution with df = 1.
+> r(T)(1) # one random number generated from this distribution, e.g. -0.09697573
+[1] -0.5947235
+> d(T)(1) # Density of this distribution is 0.1591549 for x = 1.
+[1] 0.1591549
+> p(T)(1) # Probability that x < 1 is 0.75.
+[1] 0.75
+> q(T)(.1) # Probability that x < -3.077684 is 0.1.
+[1] -3.077684
+> ## in RStudio or Jupyter IRKernel, use q.l(.)(.) instead of q(.)(.)
+> df(T) # df of this distribution is 1.
+[1] 1
+> df(T) <- 2 # df of this distribution is now 2.
+> Tn <- Td(df = 1, ncp = 5) 
+>   # T is a noncentral t distribution with df = 1 and ncp = 5.
+> d(Tn)(1) ## from R 2.3.0 on ncp no longer ignored...
+[1] 0.002722894
+> 
+> 
+> 
+> cleanEx()
+> nameEx("Truncate-methods")
+> ### * Truncate-methods
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: Truncate-methods
+> ### Title: Methods for function Truncate in Package 'distr'
+> ### Aliases: Truncate-methods Truncate Truncate,AbscontDistribution-method
+> ###   Truncate,DiscreteDistribution-method
+> ###   Truncate,LatticeDistribution-method
+> ###   Truncate,UnivarLebDecDistribution-method
+> ### Keywords: distribution methods
+> 
+> ### ** Examples
+> 
+> plot(Truncate(Norm(),lower=-1,upper=2))
+> TN <- Truncate(Norm(),lower=15,upper=15.7) ### remarkably right!
+> plot(TN)
+> r(TN)(30)
+ [1] 15.04207 15.02430 15.13204 15.13457 15.06888 15.00378 15.02294 15.05793
+ [9] 15.03215 15.13148 15.01898 15.04167 15.02272 15.00080 15.02840 15.02909
+[17] 15.01103 15.04858 15.08284 15.05367 15.00655 15.04951 15.09047 15.05559
+[25] 15.15164 15.18813 15.05449 15.00128 15.02455 15.03054
+> TNG <- Truncate(Geom(prob=0.05),lower=325,upper=329) ### remarkably right!
+> plot(TNG)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("UniNormParameter-class")
+> ### * UniNormParameter-class
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: UniNormParameter-class
+> ### Title: Class "UniNormParameter"
+> ### Aliases: UniNormParameter-class initialize,UniNormParameter-method
+> ### Keywords: distribution
+> 
+> ### ** Examples
+> 
+> W <- new("UniNormParameter", mean = 0, sd = 1)
+> sd(W) # sd of this distribution is 1
+[1] 1
+> sd(W) <- 2 # sd of this distribution is now 2
+> 
+> 
+> 
+> cleanEx()
+> nameEx("Unif-class")
+> ### * Unif-class
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: Unif-class
+> ### Title: Class "Unif"
+> ### Aliases: Unif-class Unif initialize,Unif-method
+> ### Keywords: distribution
+> 
+> ### ** Examples
+> 
+> U <- Unif(Min=0,Max=2) # U is a uniform distribution with Min=0 and Max=2.
+> r(U)(1) # one random number generated from this distribution, e.g. 1.984357
+[1] 0.5310173
+> d(U)(1) # Density of this distribution is 0.5 for x=1.
+[1] 0.5
+> p(U)(1) # Probability that x<1 is 0.5.
+[1] 0.5
+> q(U)(.1) # Probability that x<0.2 is 0.1.
+[1] 0.2
+> ## in RStudio or Jupyter IRKernel, use q.l(.)(.) instead of q(.)(.)
+> Min(U) # Min of this distribution is 0.
+[1] 0
+> Min(U) <- 1 # Min of this distribution is now 1.
+> Min(U) # Min of this distribution is 1.
+[1] 1
+> Min(U) <- 0
+> is(U/2,"Beta") # yes
+[1] TRUE
+> V <- U/2; as(V,"Beta")
+Distribution Object of Class: Beta
+ shape1: 1
+ shape2: 1
+ ncp: 0
+> 
+> 
+> 
+> cleanEx()
+> nameEx("UnifParameter-class")
+> ### * UnifParameter-class
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: UnifParameter-class
+> ### Title: Class "UnifParameter"
+> ### Aliases: UnifParameter-class initialize,UnifParameter-method
+> ### Keywords: distribution
+> 
+> ### ** Examples
+> 
+> W <- new("UnifParameter",Min=0,Max=1)
+> Max(W) # Max of this distribution is 1.
+[1] 1
+> Max(W) <- 2 # Max of this distribution is now 2.
+> 
+> 
+> 
+> cleanEx()
+> nameEx("UnivarDistrList-class")
+> ### * UnivarDistrList-class
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: UnivarDistrList-class
+> ### Title: List of univariate distributions
+> ### Aliases: UnivarDistrList-class
+> ###   coerce,UnivariateDistribution,UnivarDistrList-method
+> ### Keywords: distribution list
+> 
+> ### ** Examples
+> 
+> (DL <- new("UnivarDistrList", list(Norm(), Exp())))
+An object of class "UnivarDistrList"
+ [[1]] Distribution Object of Class: Norm
+       :mean: 0
+       :sd: 1
+ [[2]] Distribution Object of Class: Exp
+       :rate: 1
+> plot(DL)
+> as(Norm(), "UnivarDistrList")
+An object of class "UnivarDistrList"
+ [[1]] Distribution Object of Class: Norm
+       :mean: 0
+       :sd: 1
+> 
+> 
+> 
+> cleanEx()
+> nameEx("UnivarDistrList")
+> ### * UnivarDistrList
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: UnivarDistrList
+> ### Title: Generating function for UnivarDistrList-class
+> ### Aliases: UnivarDistrList
+> ### Keywords: list distribution
+> 
+> ### ** Examples
+> 
+> (DL <- UnivarDistrList(Norm(), Exp(), Pois()))
+An object of class "UnivarDistrList"
+ [[1]] Distribution Object of Class: Norm
+       :mean: 0
+       :sd: 1
+ [[2]] Distribution Object of Class: Exp
+       :rate: 1
+ [[3]] Distribution Object of Class: Pois
+       :lambda: 1
+> plot(DL)
+> as(Norm(), "UnivarDistrList")
+An object of class "UnivarDistrList"
+ [[1]] Distribution Object of Class: Norm
+       :mean: 0
+       :sd: 1
+> 
+> ## The function is currently defined as
+> function(...){ 
++     new("UnivarDistrList", list(...)) 
++ }
+function (...) 
+{
+    new("UnivarDistrList", list(...))
+}
+> 
+> 
+> 
+> cleanEx()
+> nameEx("UnivarLebDecDistribution-class")
+> ### * UnivarLebDecDistribution-class
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: UnivarLebDecDistribution-class
+> ### Title: Class "UnivarLebDecDistribution"
+> ### Aliases: UnivarLebDecDistribution-class
+> ###   AffLinUnivarLebDecDistribution-class AcDcLcDistribution-class acPart
+> ###   discretePart acPart<- discretePart<- acPart-methods
+> ###   discretePart-methods acPart<--methods discretePart<--methods
+> ###   acPart,UnivarLebDecDistribution-method
+> ###   discretePart,UnivarLebDecDistribution-method
+> ###   acPart<-,UnivarLebDecDistribution-method
+> ###   discretePart<-,UnivarLebDecDistribution-method acWeight
+> ###   discreteWeight acWeight<- discreteWeight<- acWeight-methods
+> ###   discreteWeight-methods acWeight<--methods discreteWeight<--methods
+> ###   acWeight,UnivarLebDecDistribution-method
+> ###   discreteWeight,UnivarLebDecDistribution-method
+> ###   acWeight<-,UnivarLebDecDistribution-method
+> ###   discreteWeight<-,UnivarLebDecDistribution-method
+> ###   p.discrete,UnivarLebDecDistribution-method
+> ###   d.discrete,UnivarLebDecDistribution-method
+> ###   q.discrete,UnivarLebDecDistribution-method
+> ###   r.discrete,UnivarLebDecDistribution-method
+> ###   p.ac,UnivarLebDecDistribution-method
+> ###   d.ac,UnivarLebDecDistribution-method
+> ###   q.ac,UnivarLebDecDistribution-method
+> ###   r.ac,UnivarLebDecDistribution-method p.discrete-methods
+> ###   d.discrete-methods q.discrete-methods r.discrete-methods p.ac-methods
+> ###   d.ac-methods q.ac-methods r.ac-methods p.discrete d.discrete
+> ###   q.discrete r.discrete p.ac d.ac q.ac r.ac
+> ###   coerce,AbscontDistribution,UnivarLebDecDistribution-method
+> ###   coerce,DiscreteDistribution,UnivarLebDecDistribution-method
+> ###   coerce,AffLinUnivarLebDecDistribution,UnivarLebDecDistribution-method
+> ###   abs,UnivarLebDecDistribution-method
+> ###   log,UnivarLebDecDistribution-method
+> ###   log10,UnivarLebDecDistribution-method
+> ###   Math,UnivarLebDecDistribution-method
+> ###   ^,AcDcLcDistribution,Dirac-method exp,UnivarLebDecDistribution-method
+> ###   sign,UnivarLebDecDistribution-method sign,AcDcLcDistribution-method
+> ###   sqrt,UnivarLebDecDistribution-method sqrt,AcDcLcDistribution-method
+> ### Keywords: distribution
+> 
+> ### ** Examples
+> 
+> wg <- flat.mix(UnivarMixingDistribution(Unif(0,1),Unif(4,5),
++                withSimplify=FALSE))
+> myLC <- UnivarLebDecDistribution(discretePart=Binom(3,.3), acPart = wg,
++           discreteWeight=.2)
+> myLC
+An object of class "UnivarLebDecDistribution"
+ --- a Lebesgue decomposed distribution:
+
+    Its discrete part (with weight 0.200000) is a
+ Distribution Object of Class: Binom
+ size: 3
+ prob: 0.3
+ This part is accessible with 'discretePart(<obj>)'.
+
+    Its absolutely continuous part (with weight 0.800000) is a
+ Distribution Object of Class: AbscontDistribution
+ This part is accessible with 'acPart(<obj>)'.
+Warning in (new("standardGeneric", .Data = function (object)  :
+  arithmetics on distributions are understood as operations on r.v.'s
+see 'distrARITH()'; for switching off this warning see '?distroptions'
+> p(myLC)(0.3)
+[1] 0.1886
+> r(myLC)(30)
+ [1] 4.23962942 0.29360337 4.64228826 0.00000000 0.65087047 1.00000000
+ [7] 1.00000000 4.41008408 0.08424691 4.60493329 0.33907294 0.83944035
+[13] 0.34668349 0.33377493 0.47635125 0.89219834 4.12937235 1.00000000
+[19] 0.77732070 0.96061800 1.00000000 0.71251468 4.35672691 4.43147369
+[25] 4.14821156 4.01307758 4.71556607 0.12169192 0.00000000 4.64010105
+> q(myLC)(0.9)
+[1] 4.75
+> ## in RStudio or Jupyter IRKernel, use q.l(.)(.) instead of q(.)(.)
+> acPart(myLC)
+Distribution Object of Class: AbscontDistribution
+Warning in (new("standardGeneric", .Data = function (object)  :
+  arithmetics on distributions are understood as operations on r.v.'s
+see 'distrARITH()'; for switching off this warning see '?distroptions'
+> plot(myLC)
+> d.discrete(myLC)(2)
+[1] 0.189
+> p.ac(myLC)(0)
+[1] 0
+> acWeight(myLC)
+acWeight 
+     0.8 
+> plot(acPart(myLC))
+> plot(discretePart(myLC))
+> gaps(myLC)
+         [,1]     [,2]
+[1,] 1.000026 2.000000
+[2,] 2.000000 3.000000
+[3,] 3.000000 3.999974
+> support(myLC)
+[1] 0 1 2 3
+> plot(as(Norm(),"UnivarLebDecDistribution"))
+> 
+> 
+> 
+> cleanEx()
+> nameEx("UnivarLebDecDistribution")
+> ### * UnivarLebDecDistribution
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: UnivarLebDecDistribution
+> ### Title: Generating function for Class "UnivarLebDecDistribution"
+> ### Aliases: UnivarLebDecDistribution
+> ### Keywords: distribution list
+> 
+> ### ** Examples
+> 
+> mylist <- UnivarLebDecDistribution(discretePart=Binom(3,.3), acPart=Norm(2,2),
++           acWeight=11/20)
+> mylist          
+An object of class "UnivarLebDecDistribution"
+ --- a Lebesgue decomposed distribution:
+
+    Its discrete part (with weight 0.450000) is a
+ Distribution Object of Class: Binom
+ size: 3
+ prob: 0.3
+ This part is accessible with 'discretePart(<obj>)'.
+
+    Its absolutely continuous part (with weight 0.550000) is a
+ Distribution Object of Class: Norm
+ mean: 2
+ sd: 2
+ This part is accessible with 'acPart(<obj>)'.
+> 
+> 
+> 
+> cleanEx()
+> nameEx("UnivarMixingDistribution-class")
+> ### * UnivarMixingDistribution-class
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: UnivarMixingDistribution-class
+> ### Title: Class "UnivarMixingDistribution"
+> ### Aliases: UnivarMixingDistribution-class mixCoeff mixDistr mixCoeff<-
+> ###   mixDistr<- mixCoeff<--methods mixDistr<--methods
+> ###   mixCoeff<-,UnivarMixingDistribution-method
+> ###   mixDistr<-,UnivarMixingDistribution-method mixCoeff-methods
+> ###   mixDistr-methods mixCoeff,UnivarMixingDistribution-method
+> ###   mixDistr,UnivarMixingDistribution-method
+> ###   support,UnivarMixingDistribution-method
+> ###   gaps,UnivarMixingDistribution-method
+> ###   .logExact,UnivarMixingDistribution-method
+> ###   .lowerExact,UnivarMixingDistribution-method
+> ###   Symmetry,UnivarMixingDistribution-method
+> ### Keywords: distribution
+> 
+> ### ** Examples
+> 
+> mylist <- UnivarMixingDistribution(Binom(3,.3), Dirac(2), Norm(), 
++           mixCoeff=c(1/4,1/5,11/20))
+> mylist2 <- UnivarMixingDistribution(Binom(3,.3), mylist, 
++           mixCoeff=c(.3,.7))
+> mylist2
+An object of class "UnivarLebDecDistribution"
+ --- a Lebesgue decomposed distribution:
+
+    Its discrete part (with weight 0.615000) is a
+ Distribution Object of Class: DiscreteDistribution
+ This part is accessible with 'discretePart(<obj>)'.
+
+    Its absolutely continuous part (with weight 0.385000) is a
+ Distribution Object of Class: AbscontDistribution
+ This part is accessible with 'acPart(<obj>)'.
+Warning in (new("standardGeneric", .Data = function (object)  :
+  arithmetics on distributions are understood as operations on r.v.'s
+see 'distrARITH()'; for switching off this warning see '?distroptions'
+> p(mylist)(0.3)          
+[1] 0.4256013
+> mixDistr(mylist2)
+An object of class "UnivarDistrList"
+ [[1]] Distribution Object of Class: AbscontDistribution
+ [[2]] Distribution Object of Class: DiscreteDistribution
+Warning in (new("standardGeneric", .Data = function (object)  :
+  arithmetics on distributions are understood as operations on r.v.'s
+see 'distrARITH()'; for switching off this warning see '?distroptions'
+> 
+> 
+> 
+> cleanEx()
+> nameEx("UnivarMixingDistribution")
+> ### * UnivarMixingDistribution
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: UnivarMixingDistribution
+> ### Title: Generating function for Class "UnivarMixingDistribution"
+> ### Aliases: UnivarMixingDistribution
+> ### Keywords: distribution list
+> 
+> ### ** Examples
+> 
+> mylist <- UnivarMixingDistribution(Binom(3,.3), Dirac(2), Norm(), 
++           mixCoeff=c(1/4,1/5,11/20))
+> 
+> 
+> 
+> cleanEx()
+> nameEx("Weibull-class")
+> ### * Weibull-class
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: Weibull-class
+> ### Title: Class "Weibull"
+> ### Aliases: Weibull-class Weibull initialize,Weibull-method
+> ### Keywords: distribution
+> 
+> ### ** Examples
+> 
+> W <- Weibull(shape=1,scale=1) # W is a Weibull distribution with shape=1 and scale=1.
+> r(W)(1) # one random number generated from this distribution, e.g. 0.5204105
+[1] 1.326108
+> d(W)(1) # Density of this distribution is 0.3678794 for x=1.
+[1] 0.3678794
+> p(W)(1) # Probability that x<1 is 0.6321206.
+[1] 0.6321206
+> q(W)(.1) # Probability that x<0.1053605 is 0.1.
+[1] 0.1053605
+> ## in RStudio or Jupyter IRKernel, use q.l(.)(.) instead of q(.)(.)
+> shape(W) # shape of this distribution is 1.
+[1] 1
+> shape(W) <- 2 # shape of this distribution is now 2.
+> 
+> 
+> 
+> cleanEx()
+> nameEx("WeibullParameter-class")
+> ### * WeibullParameter-class
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: WeibullParameter-class
+> ### Title: Class "WeibullParameter"
+> ### Aliases: WeibullParameter-class initialize,WeibullParameter-method
+> ### Keywords: distribution
+> 
+> ### ** Examples
+> 
+> W <- new("WeibullParameter",shape=1,scale=1)
+> shape(W) # shape of this distribution is 1.
+[1] 1
+> shape(W) <- 2 # shape of this distribution is now 2.
+> 
+> 
+> 
+> cleanEx()
+> nameEx("decomposePM-methods")
+> ### * decomposePM-methods
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: decomposePM-methods
+> ### Title: Methods for function decomposePM in Package 'distr'
+> ### Aliases: decomposePM-methods decomposePM
+> ###   decomposePM,AbscontDistribution-method
+> ###   decomposePM,DiscreteDistribution-method
+> ###   decomposePM,UnivarLebDecDistribution-method
+> ### Keywords: distribution methods
+> 
+> ### ** Examples
+> 
+> decomposePM(Norm())
+$neg
+$neg$D
+Distribution Object of Class: AbscontDistribution
+
+$neg$w
+[1] 0.5
+
+
+$pos
+$pos$D
+Distribution Object of Class: AbscontDistribution
+
+$pos$w
+[1] 0.5
+
+
+> decomposePM(Binom(2,0.3)-Binom(5,.4))
+$neg
+$neg$D
+Distribution Object of Class: DiscreteDistribution
+
+$neg$w
+[1] 0.758944
+
+
+$`0`
+$`0`$D
+Distribution Object of Class: Dirac
+ location: 0
+
+$`0`$w
+[1] 0.1780704
+
+
+$pos
+$pos$D
+Distribution Object of Class: DiscreteDistribution
+
+$pos$w
+[1] 0.0629856
+
+
+> decomposePM(UnivarLebDecDistribution(Norm(),Binom(2,0.3)-Binom(5,.4), 
++             acWeight = 0.3))
+$pos
+$pos$D
+An object of class "UnivarLebDecDistribution"
+ --- a Lebesgue decomposed distribution:
+
+    Its discrete part (with weight 0.227000) is a
+ Distribution Object of Class: DiscreteDistribution
+ This part is accessible with 'discretePart(<obj>)'.
+
+    Its absolutely continuous part (with weight 0.773000) is a
+ Distribution Object of Class: AbscontDistribution
+ This part is accessible with 'acPart(<obj>)'.
+
+$pos$w
+discreteWeight 
+     0.1940899 
+
+
+$neg
+$neg$D
+An object of class "UnivarLebDecDistribution"
+ --- a Lebesgue decomposed distribution:
+
+    Its discrete part (with weight 0.780000) is a
+ Distribution Object of Class: DiscreteDistribution
+ This part is accessible with 'discretePart(<obj>)'.
+
+    Its absolutely continuous part (with weight 0.220000) is a
+ Distribution Object of Class: AbscontDistribution
+ This part is accessible with 'acPart(<obj>)'.
+
+$neg$w
+discreteWeight 
+     0.6812608 
+
+
+$`0`
+$`0`$D
+Distribution Object of Class: Dirac
+ location: 0
+
+$`0`$w
+discreteWeight 
+     0.1246493 
+
+
+> 
+> 
+> 
+> cleanEx()
+> nameEx("distrARITH")
+> ### * distrARITH
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: distrARITH
+> ### Title: Arithmetics on Distributions
+> ### Aliases: distrARITH ARITHMETICS
+> ### Keywords: math distribution arith documentation
+> 
+> ### ** Examples
+> 
+> distrARITH()
+######################################################################
+#  On arithmetics operating on distributions in package "distr"       
+######################################################################
+
+
+                      Attention:
+
+Special caution is due in the followin issues
+
+%--------------------------------------------------------------------
+% Interpretation of arithmetics
+%--------------------------------------------------------------------
+
+Arithmetics on distribution objects are understood as operations on 
+corresponding random variables (r.v.'s) and _not_ on distribution 
+functions or densities; 
+e.g.
+
+    sin( Norm() + 3 * Norm() ) + 2
+    
+returns a distribution object representing the distribution of the r.v. 
+
+     sin(X+3*Y)+2
+     
+where X and Y are r.v.'s i.i.d. N(0,1).
+
+%--------------------------------------------------------------------
+% Adjusting accuracy
+%--------------------------------------------------------------------
+
+Binary operators like "+", "-" would loose their elegant calling
+ e1 + e2 if they had to be called with an extra argument controlling
+their accuracy. Therefore, this accuracy is controlled by global options.
+These options are inspected and set by distroptions(), getdistrOption(),
+see ?distroptions
+
+%--------------------------------------------------------------------
+% Multiple instances in expressions and independence
+%--------------------------------------------------------------------
+
+Special attention has to be paid to arithmetic expressions of
+distributions involving multiple instances of the same symbol:
+
+/-> All arising instances of distribution objects in arithmetic
+    expressions are assumed stochastically independent. <-/
+
+As a consequence, whenever in an expression, the same symbol for 
+an object occurs more than once, every instance means a new 
+independent distribution.  
+
+So for a distribution object X, the expressions X+X and 2*X are _not_
+equivalent. 
+
+The first means the convolution of distribution X with distribution 
+X, i.e. the distribution of the r.v. X1 + X2, where X1 and X2 are 
+identically distributed according to X. 
+In contrast to this, the second expression means the distribution of 
+the r.v. 2 X1 = X1 + X1, where again X1 is distributed according to X.
+
+Hence always use 2*X, when you want to realize the second case.
+
+Similar caution is due for X^2 and X*X and so on.
+
+%--------------------------------------------------------------------
+% Simulation based results varying from call to call
+%--------------------------------------------------------------------
+
+At several instances (in particular for non-monotone functions from group
+ Math like sin(), cos()) new distributions are generated by means of 
+RtoDPQ, RtoDPQ.d, RtoDPQ.LC. In these functions, slots d, p, q are 
+filled by simulating a large number of random variables, hence they are 
+stochastic estimates. 
+
+So don't be surprised if they will change from call to call.
+> 
+> 
+> 
+> cleanEx()
+> nameEx("distrMASK")
+> ### * distrMASK
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: distrMASK
+> ### Title: Masking of/by other functions in package "distr"
+> ### Aliases: distrMASK MASKING
+> ### Keywords: programming distribution documentation
+> 
+> ### ** Examples
+> 
+> distrMASK()
+######################################################################
+#  On masking of and by other functions in package "distr"       
+######################################################################
+
+Attention:
+
+*** intentional masking: ***
+
+To be able to use the same symbol for (theoretical) distributional
+arguments as for (empirical) data arguments in case of 'sd' 
+and 'qqplot', and to be able to use it as accessor to corresponding 
+slots in case of 'df', we intentionally mask the following functions 
+--- however  all these functions may still be used in exactly the 
+same way as  before masking:
+
++sd()      (package "stats")
++df()      (package "stats")
++qqplot()  (package "stats")
+
+To be able to use the same symbol for objects of S4-classes,
+'PosSemDefSymmMatrix', 'matrix', respectively, 
+we intentionally mask the following functions --- however these 
+functions may again still be used in exactly the same way as before 
+masking:
+
++solve()      (package "base")
++sqrt()       (package "base")
+ 
+ 
+solve() more specifically will first try the 'usual' methods and
+if this fails due to singularity, it will use 'ginv' for usual
+matrices and an adapted eigen decomposition for 'PosSemDefSymmMatrix'.
+
+*** non-intentional masking: ***
+
+... nothing discovered so far ...
+> 
+> 
+> 
+> cleanEx()
+> nameEx("distroptions")
+> ### * distroptions
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: distroptions
+> ### Title: functions to change the global variables of the package 'distr'
+> ### Aliases: distroptions getdistrOption DefaultNrGridPoints
+> ###   DistrResolution DistrCollapse TruncQuantile WarningSim WarningArith
+> ###   DefaultNrFFTGridPointsExponent RtoDPQ.e WarningArith WarningSim
+> ###   withSweave warn.makeDNew withgaps use.generalized.inverse.by.default
+> ###   DistributionAggregate.Unique.Warn
+> ### Keywords: distribution
+> 
+> ### ** Examples
+> 
+> distroptions("RtoDPQ.e") # returns the value of RtoDPQ.e, by default = 5
+$RtoDPQ.e
+[1] 5
+
+> currentDistrOptions <- distroptions()
+> distroptions(RtoDPQ.e = 6)
+> distroptions("RtoDPQ.e") 
+$RtoDPQ.e
+[1] 6
+
+> getdistrOption("RtoDPQ.e") 
+[1] 6
+> distroptions(c("WarningSim","WarningArith"))   
+$WarningSim
+[1] TRUE
+
+$WarningArith
+[1] TRUE
+
+> getdistrOption("WarningSim")   
+[1] TRUE
+> distroptions("WarningSim" = FALSE)   
+>          # switches off warnings as to (In)accuracy due to simulations
+> distroptions("WarningArith" = FALSE) 
+>          # switches off warnings as to arithmetics
+> distroptions(currentDistrOptions)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("flat.LCD")
+> ### * flat.LCD
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: flat.LCD
+> ### Title: Flattening a list of Lebesgue decomposed distributions
+> ### Aliases: flat.LCD
+> ### Keywords: math distribution arith
+> 
+> ### ** Examples
+> 
+> D1 <- as(Norm(),"UnivarLebDecDistribution")
+> D2 <- as(Pois(1),"UnivarLebDecDistribution")
+> D3 <- as(Binom(1,.4),"UnivarLebDecDistribution")
+> flat.LCD(D1,D2,D3, mixCoeff = c(0.4,0.5,0.1))
+An object of class "UnivarLebDecDistribution"
+ --- a Lebesgue decomposed distribution:
+
+    Its discrete part (with weight 0.600000) is a
+ Distribution Object of Class: DiscreteDistribution
+ This part is accessible with 'discretePart(<obj>)'.
+
+    Its absolutely continuous part (with weight 0.400000) is a
+ Distribution Object of Class: AbscontDistribution
+ This part is accessible with 'acPart(<obj>)'.
+Warning in (new("standardGeneric", .Data = function (object)  :
+  arithmetics on distributions are understood as operations on r.v.'s
+see 'distrARITH()'; for switching off this warning see '?distroptions'
+> 
+> 
+> 
+> cleanEx()
+> nameEx("flat.mix")
+> ### * flat.mix
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: flat.mix
+> ### Title: Default procedure to fill slots d,p,q given r for Lebesgue
+> ###   decomposed distributions
+> ### Aliases: flat.mix
+> ### Keywords: distribution arith
+> 
+> ### ** Examples
+> 
+> D1 <- Norm()
+> D2 <- Pois(1)
+> D3 <- Binom(1,.4)
+> D4 <- UnivarMixingDistribution(D1,D2,D3, mixCoeff = c(0.4,0.5,0.1), 
++       withSimplify = FALSE)
+> D <- UnivarMixingDistribution(D1,D4,D1,D2, mixCoeff = c(0.4,0.3,0.1,0.2), 
++       withSimplify = FALSE)
+> D
+An object of class "UnivarMixingDistribution"
+ ---------------------------------------------
+ It consists of  4 components 
+ Components: 
+ [[1]]Distribution Object of Class: Norm
+       :mean: 0
+       :sd: 1
+ [[2]]An object of class "UnivarMixingDistribution"
+       :---------------------------------------------
+       :It consists of  3 components 
+       :Components: 
+       :[[1]]Distribution Object of Class: Norm
+       :      :mean: 0
+       :      :sd: 1
+       :[[2]]Distribution Object of Class: Pois
+       :      :lambda: 1
+       :[[3]]Distribution Object of Class: Binom
+       :      :size: 1
+       :      :prob: 0.4
+       :---------------------------------------------
+       :Weights: 
+       :0.400000       :0.500000       :0.100000       :
+ ---------------------------------------------
+ [[3]]Distribution Object of Class: Norm
+       :mean: 0
+       :sd: 1
+ [[4]]Distribution Object of Class: Pois
+       :lambda: 1
+ ---------------------------------------------
+ Weights: 
+ 0.400000 0.300000 0.100000 0.200000 
+ ---------------------------------------------
+> D0<-flat.mix(D)
+> D0
+An object of class "UnivarLebDecDistribution"
+ --- a Lebesgue decomposed distribution:
+
+    Its discrete part (with weight 0.380000) is a
+ Distribution Object of Class: DiscreteDistribution
+ This part is accessible with 'discretePart(<obj>)'.
+
+    Its absolutely continuous part (with weight 0.620000) is a
+ Distribution Object of Class: AbscontDistribution
+ This part is accessible with 'acPart(<obj>)'.
+Warning in (new("standardGeneric", .Data = function (object)  :
+  arithmetics on distributions are understood as operations on r.v.'s
+see 'distrARITH()'; for switching off this warning see '?distroptions'
+> plot(D0)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("getLabel")
+> ### * getLabel
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: getLabel
+> ### Title: Labels for distribution objects
+> ### Aliases: getLabel
+> ### Keywords: distribution
+> 
+> ### ** Examples
+> 
+> ## example due to Kouros Owzar:
+> foo<- function(law,n, withnames = TRUE)
++   {
++     data.frame(muhat=mean(r(law)(n)),n=n,law= getLabel(law,withnames))
++   } 
+> ### a function that groups certain informations on 
+> ##  created with distribution objects
+> do.call("rbind",lapply(list(Exp(1),Norm(0,1),Weibull(1,1)),foo,n=100))
+        muhat   n                           law
+1  1.03067644 100                 Exp(rate = 1)
+2 -0.02440986 100        Norm(mean = 0, sd = 1)
+3  0.98342097 100 Weibull(shape = 1, scale = 1)
+> do.call("rbind",lapply(list(Exp(1),Norm(0,1),Weibull(1,1)),foo,n=100,FALSE))
+       muhat   n           law
+1 0.97946338 100        Exp(1)
+2 0.01814266 100    Norm(0, 1)
+3 1.29391589 100 Weibull(1, 1)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("igamma")
+> ### * igamma
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: igamma
+> ### Title: Inverse of the digamma function
+> ### Aliases: igamma
+> ### Keywords: math
+> 
+> ### ** Examples
+> 
+> igamma(digamma(c(1e-4,1,20,1e8)))
+[1] 1.000000e-04 1.000000e+00 2.099929e+01 1.734796e+09
+> 
+> 
+> 
+> cleanEx()
+> nameEx("liesInSupport")
+> ### * liesInSupport
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: liesInSupport
+> ### Title: Generic Function for Testing the Support of a Distribution
+> ### Aliases: liesInSupport liesInSupport-methods
+> ###   liesInSupport,UnivarLebDecDistribution,numeric-method
+> ###   liesInSupport,UnivarMixingDistribution,numeric-method
+> ###   liesInSupport,LatticeDistribution,numeric-method
+> ###   liesInSupport,DiscreteDistribution,numeric-method
+> ###   liesInSupport,Distribution,matrix-method
+> ###   liesInSupport,AbscontDistribution,numeric-method
+> ###   liesInSupport,ExpOrGammaOrChisq,numeric-method
+> ###   liesInSupport,Lnorm,numeric-method liesInSupport,Fd,numeric-method
+> ###   liesInSupport,Norm,numeric-method liesInSupport,DExp,numeric-method
+> ###   liesInSupport,Cauchy,numeric-method liesInSupport,Td,numeric-method
+> ###   liesInSupport,Logis,numeric-method
+> ###   liesInSupport,Weibull,numeric-method
+> ###   liesInSupport,Unif,numeric-method liesInSupport,Beta,numeric-method
+> ### Keywords: distribution methods
+> 
+> ### ** Examples
+> 
+> liesInSupport(Exp(1), rnorm(10))
+ [1] FALSE  TRUE FALSE  TRUE  TRUE FALSE  TRUE  TRUE  TRUE FALSE
+> 
+> # note
+> x <- rpois(10, lambda = 10)
+> liesInSupport(Pois(1), x)
+ [1] FALSE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE FALSE FALSE FALSE
+> # better
+> liesInSupport(Pois(1), x, checkFin = TRUE)
+ [1] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
+> liesInSupport(Pois(1), 1000*x, checkFin = TRUE)
+ [1] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
+> liesInSupport(-10*Pois(1), -10*x+1, checkFin = TRUE)
+ [1] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+> 
+> xs = c(1000*x,runif(10))
+> D <- UnivarMixingDistribution(Pois(1),Unif())
+> liesInSupport(D, xs)
+ [1] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE  TRUE  TRUE
+[13]  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("operators-methods")
+> ### * operators-methods
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: operators-methods
+> ### Title: Methods for operators +,-,*,/,... in Package distr
+> ### Aliases: operators-methods operators
+> ###   -,UnivariateDistribution,missing-method
+> ###   -,LatticeDistribution,missing-method -,Norm,missing-method
+> ###   +,UnivariateDistribution,numeric-method
+> ###   +,AbscontDistribution,numeric-method
+> ###   +,DiscreteDistribution,numeric-method
+> ###   +,LatticeDistribution,numeric-method
+> ###   +,UnivarLebDecDistribution,numeric-method
+> ###   +,AffLinAbscontDistribution,numeric-method
+> ###   +,AffLinDiscreteDistribution,numeric-method
+> ###   +,AffLinLatticeDistribution,numeric-method
+> ###   +,AffLinUnivarLebDecDistribution,numeric-method
+> ###   +,CompoundDistribution,numeric-method +,Cauchy,numeric-method
+> ###   +,Dirac,numeric-method +,Norm,numeric-method +,Unif,numeric-method
+> ###   +,numeric,UnivariateDistribution-method
+> ###   +,numeric,LatticeDistribution-method
+> ###   -,UnivariateDistribution,numeric-method
+> ###   -,UnivariateDistribution,UnivariateDistribution-method
+> ###   -,LatticeDistribution,numeric-method
+> ###   -,LatticeDistribution,LatticeDistribution-method
+> ###   -,LatticeDistribution,UnivariateDistribution-method
+> ###   -,UnivariateDistribution,LatticeDistribution-method
+> ###   -,AcDcLcDistribution,AcDcLcDistribution-method
+> ###   -,numeric,UnivariateDistribution-method
+> ###   -,numeric,LatticeDistribution-method
+> ###   *,UnivariateDistribution,numeric-method
+> ###   *,AbscontDistribution,numeric-method
+> ###   *,DiscreteDistribution,numeric-method
+> ###   *,LatticeDistribution,numeric-method
+> ###   *,UnivarLebDecDistribution,numeric-method
+> ###   *,CompoundDistribution,numeric-method
+> ###   *,AffLinAbscontDistribution,numeric-method
+> ###   *,AffLinDiscreteDistribution,numeric-method
+> ###   *,AffLinLatticeDistribution,numeric-method
+> ###   *,AffLinUnivarLebDecDistribution,numeric-method *,DExp,numeric-method
+> ###   *,Exp,numeric-method *,ExpOrGammaOrChisq,numeric-method
+> ###   *,Weibull,numeric-method *,Cauchy,numeric-method
+> ###   *,Dirac,numeric-method *,Norm,numeric-method *,Logis,numeric-method
+> ###   *,Lnorm,numeric-method *,Unif,numeric-method
+> ###   *,numeric,UnivariateDistribution-method
+> ###   *,numeric,LatticeDistribution-method
+> ###   /,UnivariateDistribution,numeric-method
+> ###   /,LatticeDistribution,numeric-method
+> ###   +,UnivariateDistribution,UnivariateDistribution-method
+> ###   +,AbscontDistribution,AbscontDistribution-method
+> ###   +,AbscontDistribution,DiscreteDistribution-method
+> ###   +,DiscreteDistribution,AbscontDistribution-method
+> ###   +,DiscreteDistribution,DiscreteDistribution-method
+> ###   +,LatticeDistribution,DiscreteDistribution-method
+> ###   +,LatticeDistribution,LatticeDistribution-method
+> ###   +,UnivarLebDecDistribution,UnivarLebDecDistribution-method
+> ###   +,AcDcLcDistribution,AcDcLcDistribution-method +,Binom,Binom-method
+> ###   +,Cauchy,Cauchy-method +,Chisq,Chisq-method +,Dirac,Dirac-method
+> ###   +,ExpOrGammaOrChisq,ExpOrGammaOrChisq-method +,Pois,Pois-method
+> ###   +,Nbinom,Nbinom-method +,Norm,Norm-method +,Logis,numeric-method
+> ###   +,Dirac,UnivariateDistribution-method
+> ###   +,Dirac,DiscreteDistribution-method
+> ###   +,UnivariateDistribution,Dirac-method -,numeric,Beta-method
+> ###   -,Dirac,Dirac-method *,Dirac,Dirac-method
+> ###   *,Dirac,UnivariateDistribution-method
+> ###   *,UnivariateDistribution,Dirac-method
+> ###   *,AcDcLcDistribution,AcDcLcDistribution-method /,Dirac,Dirac-method
+> ###   /,numeric,Dirac-method /,numeric,AcDcLcDistribution-method
+> ###   /,AcDcLcDistribution,AcDcLcDistribution-method
+> ###   ^,AcDcLcDistribution,numeric-method
+> ###   ^,AcDcLcDistribution,Integer-method
+> ###   ^,AcDcLcDistribution,AcDcLcDistribution-method
+> ###   ^,numeric,AcDcLcDistribution-method
+> ### Keywords: math distribution arith
+> 
+> ### ** Examples
+> 
+> N <- Norm(0,3)
+> P <- Pois(4)
+> a <- 3
+> N + a
+Distribution Object of Class: Norm
+ mean: 3
+ sd: 3
+Warning in (new("standardGeneric", .Data = function (object)  :
+  arithmetics on distributions are understood as operations on r.v.'s
+see 'distrARITH()'; for switching off this warning see '?distroptions'
+> N + P
+Distribution Object of Class: AbscontDistribution
+Warning in (new("standardGeneric", .Data = function (object)  :
+  arithmetics on distributions are understood as operations on r.v.'s
+see 'distrARITH()'; for switching off this warning see '?distroptions'
+> N - a
+Distribution Object of Class: Norm
+ mean: -3
+ sd: 3
+Warning in (new("standardGeneric", .Data = function (object)  :
+  arithmetics on distributions are understood as operations on r.v.'s
+see 'distrARITH()'; for switching off this warning see '?distroptions'
+> a * N
+Distribution Object of Class: Norm
+ mean: 0
+ sd: 9
+Warning in (new("standardGeneric", .Data = function (object)  :
+  arithmetics on distributions are understood as operations on r.v.'s
+see 'distrARITH()'; for switching off this warning see '?distroptions'
+> a * P
+Distribution Object of Class: AffLinLatticeDistribution
+> N / a + sin( a * P - N)
+Distribution Object of Class: AbscontDistribution
+Warning in (new("standardGeneric", .Data = function (object)  :
+  arithmetics on distributions are understood as operations on r.v.'s
+see 'distrARITH()'; for switching off this warning see '?distroptions'
+> N * P
+An object of class "UnivarLebDecDistribution"
+ --- a Lebesgue decomposed distribution:
+
+    Its discrete part (with weight 0.018000) is a
+ Distribution Object of Class: Dirac
+ location: 0
+ This part is accessible with 'discretePart(<obj>)'.
+
+    Its absolutely continuous part (with weight 0.982000) is a
+ Distribution Object of Class: AbscontDistribution
+ This part is accessible with 'acPart(<obj>)'.
+Warning in (new("standardGeneric", .Data = function (object)  :
+  arithmetics on distributions are understood as operations on r.v.'s
+see 'distrARITH()'; for switching off this warning see '?distroptions'
+> N / N
+Distribution Object of Class: AbscontDistribution
+Warning in (new("standardGeneric", .Data = function (object)  :
+  arithmetics on distributions are understood as operations on r.v.'s
+see 'distrARITH()'; for switching off this warning see '?distroptions'
+> ## No test: 
+> ## takes a little time
+> N ^ P
+An object of class "UnivarLebDecDistribution"
+ --- a Lebesgue decomposed distribution:
+
+    Its discrete part (with weight 0.018000) is a
+ Distribution Object of Class: Dirac
+ location: 1
+ This part is accessible with 'discretePart(<obj>)'.
+
+    Its absolutely continuous part (with weight 0.982000) is a
+ Distribution Object of Class: AbscontDistribution
+ This part is accessible with 'acPart(<obj>)'.
+Warning in (new("standardGeneric", .Data = function (object)  :
+  arithmetics on distributions are understood as operations on r.v.'s
+see 'distrARITH()'; for switching off this warning see '?distroptions'
+> ## End(No test)
+> 1.2 ^ N
+Distribution Object of Class: AbscontDistribution
+Warning in (new("standardGeneric", .Data = function (object)  :
+  arithmetics on distributions are understood as operations on r.v.'s
+see 'distrARITH()'; for switching off this warning see '?distroptions'
+> abs(N) ^ 1.3
+Distribution Object of Class: AbscontDistribution
+Warning in (new("standardGeneric", .Data = function (object)  :
+  arithmetics on distributions are understood as operations on r.v.'s
+see 'distrARITH()'; for switching off this warning see '?distroptions'
+> 
+> 
+> 
+> cleanEx()
+> nameEx("options")
+> ### * options
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: options
+> ### Title: additional options in package 'distr'
+> ### Aliases: options newDevice
+> ### Keywords: environment iplot dplot
+> 
+> ### ** Examples
+> 
+> getOption("newDevice") 
+NULL
+> options("newDevice"=TRUE) 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("p-methods")
+> ### * p-methods
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: p-methods
+> ### Title: Methods for Function p in Package 'distr'
+> ### Aliases: p.r-methods p.r p.r,Distribution-method p-methods p
+> ###   p,Distribution-method
+> ### Keywords: distribution methods
+> 
+> ### ** Examples
+> 
+> require(distr)
+> N <- Norm()
+> p(N)(0.3)
+[1] 0.6179114
+> p.r(N)(0.3)
+[1] 0.6179114
+> 
+> 
+> 
+> cleanEx()
+> nameEx("plot-methods")
+> ### * plot-methods
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: plot-methods
+> ### Title: Methods for Function plot in Package 'distr'
+> ### Aliases: plot plot-methods
+> ###   plot,AffLinUnivarLebDecDistribution,missing-method
+> ###   plot,UnivarLebDecDistribution,missing-method
+> ###   plot,AbscontDistribution,missing-method
+> ###   plot,DiscreteDistribution,missing-method
+> ###   plot,CompoundDistribution,missing-method
+> ###   plot,DistrList,missing-method
+> ### Keywords: methods hplot distribution
+> 
+> ### ** Examples
+> 
+> plot(Binom(size = 4, prob = 0.3))
+> plot(Binom(size = 4, prob = 0.3), do.points = FALSE)
+dev.new(): using pdf(file="Rplots1.pdf")
+> plot(Binom(size = 4, prob = 0.3), verticals = FALSE)
+dev.new(): using pdf(file="Rplots2.pdf")
+> plot(Binom(size = 4, prob = 0.3), main = TRUE)
+dev.new(): using pdf(file="Rplots3.pdf")
+> plot(Binom(size = 4, prob = 0.3), main = FALSE)
+dev.new(): using pdf(file="Rplots4.pdf")
+> plot(Binom(size = 4, prob = 0.3), cex.points = 1.2, pch = 20)
+dev.new(): using pdf(file="Rplots5.pdf")
+> plot(Binom(size = 4, prob = 0.3), xlab = list("a1","a2", "a3"),
++            ylab=list("p"="U","q"="V","d"="W"))
+dev.new(): using pdf(file="Rplots6.pdf")
+> B <- Binom(size = 4, prob = 0.3)
+> plot(B, col = "red", col.points = "green", main = TRUE, col.main = "blue", 
++      col.sub = "orange", sub = TRUE, cex.sub = 0.6, col.inner = "brown")
+dev.new(): using pdf(file="Rplots7.pdf")
+> plot(Nbinom(size = 4,prob = 0.3), cex.points = 1.2, col = "red", 
++      col.points = "green")
+dev.new(): using pdf(file="Rplots8.pdf")
+> plot(Nbinom(size = 4,prob = 0.3), cex.points = 1.2, pch.u = 20, pch.a = 10)
+dev.new(): using pdf(file="Rplots9.pdf")
+> plot(Norm(), main = TRUE, cex.main = 3, tmar = 6)
+dev.new(): using pdf(file="Rplots10.pdf")
+> plot(Norm(), inner = FALSE, main = TRUE, cex.main = 3, tmar = 6)
+dev.new(): using pdf(file="Rplots11.pdf")
+> plot(Norm(), lwd = 3, col = "red", ngrid = 200, lty = 3, las = 2)
+dev.new(): using pdf(file="Rplots12.pdf")
+> plot(Norm(), main = "my Distribution: %A", 
++      inner = list(expression(paste(lambda,"-density of %C(%P)")), "CDF",
++                   "Pseudo-inverse with param's %N"), 
++      sub = "this plot was correctly generated on %D", 
++      cex.inner = 0.9, cex.sub = 0.8)
+dev.new(): using pdf(file="Rplots13.pdf")
+> 
+> plot(Norm(),panel.first=grid(4,4))
+dev.new(): using pdf(file="Rplots14.pdf")
+> ## does not (yet) work as desired:
+> plot(Norm(),panel.first=list(grid(5,5),grid(3,3),grid(4,4)))
+dev.new(): using pdf(file="Rplots15.pdf")
+> li <- list(substitute(grid(5,5)),substitute(grid(3,3)),substitute(grid(4,4)))
+> plot(Norm(),panel.first=li)
+dev.new(): using pdf(file="Rplots16.pdf")
+> 
+> plot(Cauchy())
+dev.new(): using pdf(file="Rplots17.pdf")
+> plot(Cauchy(), xlim = c(-4,4))
+dev.new(): using pdf(file="Rplots18.pdf")
+> plot(Chisq())
+dev.new(): using pdf(file="Rplots19.pdf")
+> ### the next ylab argument is just for illustration purposes
+> plot(Chisq(),mfColRow = FALSE,to.draw.arg="d",
++      xlab="x",ylab=list(expression(paste(lambda,"-density of %C(%P)"))))
+dev.new(): using pdf(file="Rplots20.pdf")
+> ## substitution can be switched off
+> plot(Chisq(),mfColRow = FALSE,to.draw.arg="d",
++      xlab="x",ylab=list(expression(paste(lambda,"-density of %C(%P)"))), withSubst=FALSE)
+dev.new(): using pdf(file="Rplots21.pdf")
+> plot(Chisq(), log = "xy", ngrid = 100)
+dev.new(): using pdf(file="Rplots22.pdf")
+> Ch <- Chisq(); setgaps(Ch); plot(Ch, do.points = FALSE)
+dev.new(): using pdf(file="Rplots23.pdf")
+> setgaps(Ch, exactq = 3); plot(Ch, verticals = FALSE)
+dev.new(): using pdf(file="Rplots24.pdf")
+> plot(Ch, cex = 1.2, pch.u = 20, pch.a = 10, col.points = "green", 
++      col.vert = "red")
+dev.new(): using pdf(file="Rplots25.pdf")
+> 
+> ## Not run: 
+> ##D  # to save time 
+> ##D ## some distribution with gaps
+> ##D wg <- flat.mix(UnivarMixingDistribution(Unif(0,1),Unif(4,5), 
+> ##D                withSimplify=FALSE))
+> ##D # some Lebesgue decomposed distribution 
+> ##D mymix <- UnivarLebDecDistribution(acPart = wg, discretePart = Binom(4,.4),
+> ##D          acWeight = 0.4)
+> ##D plot(mymix)         
+> ##D #
+> ##D ## selection of subpanels for plotting
+> ##D N <- Norm()
+> ##D par(mfrow=c(1,2))
+> ##D plot(N, mfColRow = FALSE, to.draw.arg=c("d","q"))
+> ##D plot(N, mfColRow = FALSE, to.draw.arg=c(2,3))
+> ##D par(mfrow=c(1,1))
+> ##D 
+> ##D wg <- flat.mix(UnivarMixingDistribution(Unif(0,1),Unif(4,5),
+> ##D                withSimplify=FALSE))
+> ##D myLC <- UnivarLebDecDistribution(discretePart=Binom(3,.3), acPart = wg,
+> ##D           discreteWeight=.2)
+> ##D layout(matrix(c(rep(1,6),2,2,3,3,4,4,5,5,5,6,6,6), 
+> ##D               nrow=3, byrow=TRUE))
+> ##D plot(myLC,mfColRow = FALSE,
+> ##D      to.draw.arg=c("p","d.c","p.c","q.c", "p.d","q.d"))
+> ##D 
+> ##D P <- Pois(2)
+> ##D plot(as(P,"UnivarLebDecDistribution"),mfColRow = FALSE,to.draw.arg=c("d.d"))
+> ##D ### the next ylab argument is just for illustration purposes
+> ##D plot(as(P,"UnivarLebDecDistribution"),mfColRow = FALSE,to.draw.arg=c("d.d"),
+> ##D      xlab="x",ylab=list(expression(paste(lambda,"-density of %C(%P)"))))
+> ## End(Not run)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("q-methods")
+> ### * q-methods
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: q-methods
+> ### Title: Methods for Function q in Package 'distr'
+> ### Aliases: q-methods q q,Distribution-method q.l-methods q.l
+> ###   q.l,Distribution-method
+> ### Keywords: distribution methods
+> 
+> ### ** Examples
+> 
+> require(distr)
+> N <- Norm()
+> q(N)(0.3)
+[1] -0.5244005
+> ## in RStudio or Jupyter IRKernel, use q.l(.)(.) instead of q(.)(.)
+> q.l(N)(0.3)
+[1] -0.5244005
+> 
+> 
+> 
+> cleanEx()
+> nameEx("qqbounds")
+> ### * qqbounds
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: qqbounds
+> ### Title: Computation of confidence intervals for qqplot
+> ### Aliases: qqbounds
+> ### Keywords: hplot distribution
+> 
+> ### ** Examples
+> 
+> qqplot(Norm(15,sqrt(30)), Chisq(df=15))
+dev.new(): using pdf(file="Rplots26.pdf")
+> ## uses:
+> qqbounds(x = rnorm(30),Norm(),alpha=0.95,n=30,
++         withConf.pw = TRUE, withConf.sim  = TRUE,
++         exact.sCI=TRUE ,exact.pCI= TRUE,
++         nosym.pCI = FALSE)
+$crit
+         sim.left   sim.right     pw.left    pw.right
+ [1,] -4.75342431 -0.65851338 -3.20489720 -1.22450257
+ [2,] -4.75342431 -0.62786859 -2.96878387 -1.00991953
+ [3,] -4.75342431 -0.48907906 -2.12551157 -0.81599319
+ [4,] -4.75342431 -0.14236527 -1.34430939 -0.32694784
+ [5,] -4.75342431 -0.13150381 -1.32377622 -0.31716055
+ [6,] -1.98101408  0.01810505 -1.11760167 -0.13530595
+ [7,] -1.95136440  0.02239731 -1.10367551 -0.13880565
+ [8,] -1.44266175  0.14586373 -0.94198708 -0.01431303
+ [9,] -1.08789212  0.31007752 -0.75820863  0.14743186
+[10,] -0.85461092  0.46717014 -0.60643706  0.29484604
+[11,] -0.71953455  0.58086251 -0.50255647  0.39029899
+[12,] -0.70512476  0.59414947 -0.49050250  0.40063529
+[13,] -0.66874999  0.62878508 -0.46448322  0.43210269
+[14,] -0.55922007  0.74357570 -0.37559435  0.52472432
+[15,] -0.43676870  0.89485306 -0.26811071  0.63539736
+[16,] -0.28610141  1.13031316 -0.12775496  0.78677051
+[17,] -0.22764800  1.24474679 -0.06761286  0.84729933
+[18,] -0.20114842  1.30303675 -0.04422508  0.88010820
+[19,] -0.13752218  1.46644652  0.02299388  0.95186422
+[20,] -0.06043474  1.74299007  0.10343863  1.04812407
+[21,] -0.04514184  1.81743531  0.11945865  1.06834399
+[22,] -0.02356467  1.94359023  0.13794016  1.10171134
+[23,]  0.07056397  4.75342431  0.23448070  1.24216871
+[24,]  0.10350510  4.75342431  0.28501253  1.27926007
+[25,]  0.13204599  4.75342431  0.31768400  1.32475839
+[26,]  0.19993037  4.75342431  0.40195248  1.43600227
+[27,]  0.21639356  4.75342431  0.42090631  1.46676611
+[28,]  0.32650020  4.75342431  0.53689189  1.71296994
+[29,]  0.50434755  4.75342431  0.74664924  2.27691310
+[30,]  0.53293715  4.75342431  0.86771051  2.32285109
+
+$err
+ sim   pw 
+TRUE TRUE 
+
+> qqbounds(x = rchisq(30,df=4),Chisq(df=4),alpha=0.95,n=30,
++         withConf.pw = TRUE, withConf.sim  = TRUE,
++         exact.sCI=FALSE ,exact.pCI= FALSE,
++         nosym.pCI = FALSE)
+$crit
+         sim.left sim.right     pw.left   pw.right
+ [1,] 0.002829761  1.137748 -0.17992340  0.9644015
+ [2,] 0.002829761  1.211608 -0.06987765  1.1192553
+ [3,] 0.002829761  1.243264 -0.02805790  1.1781644
+ [4,] 0.002829761  1.459659  0.21758339  1.5251510
+ [5,] 0.866278815  1.979070  0.69889246  2.2122824
+ [6,] 0.981404844  2.070123  0.77625753  2.3239269
+ [7,] 1.063259165  2.138420  0.83340990  2.4066552
+ [8,] 1.470582031  2.514171  1.13688816  2.8499458
+ [9,] 1.519153595  2.562366  1.17466419  2.9056414
+[10,] 1.630010561  2.674699  1.26182304  3.0346230
+[11,] 2.068834428  3.148061  1.61671662  3.5674033
+[12,] 2.086637689  3.168164  1.63137488  3.5896954
+[13,] 2.151673235  3.242171  1.68506016  3.6715499
+[14,] 2.202073110  3.300138  1.72680626  3.7354336
+[15,] 2.223362005  3.324783  1.74447525  3.7625351
+[16,] 2.429944589  3.568874  1.91692198  4.0290884
+[17,] 2.519105281  3.677009  1.99184783  4.1461183
+[18,] 3.039770110  4.343959  2.43407284  4.8539351
+[19,] 3.078091024  4.395623  2.46688549  4.9077451
+[20,] 3.259054816  4.644932  2.62224862  5.1652524
+[21,] 3.789577518  5.435110  3.08115703  5.9557985
+[22,] 3.822100350  5.486964  3.10943980  6.0061854
+[23,] 3.943245077  5.684252  3.21493261  6.1960534
+[24,] 4.122356205  5.989142  3.37130226  6.4834571
+[25,] 4.306747173  6.322229  3.53276372  6.7884558
+[26,] 4.320203869  6.347404  3.54456576  6.8111041
+[27,] 4.879536610  7.535746  4.03724746  7.8077080
+[28,] 5.145028093  8.245187  4.27238525  8.3266723
+[29,] 5.756700694 10.847667  4.81521851  9.6869349
+[30,] 5.994361608 13.316045  5.02483153 10.3027427
+
+$err
+ sim   pw 
+TRUE TRUE 
+
+> qqbounds(x = rchisq(30,df=4),Chisq(df=4),alpha=0.95,n=30,
++         withConf.pw = TRUE, withConf.sim  = TRUE,
++         exact.sCI=TRUE ,exact.pCI= TRUE,
++         nosym.pCI = TRUE)
+$crit
+         sim.left sim.right   pw.left  pw.right
+ [1,] 0.002829761  2.134126 0.2156880  1.410666
+ [2,] 0.002829761  2.152425 0.2156880  1.410666
+ [3,] 0.002829761  2.531086 0.5574596  1.938538
+ [4,] 0.002829761  2.585570 0.5574596  1.938538
+ [5,] 0.002829761  2.737564 0.7135654  2.169473
+ [6,] 0.002829761  2.853570 0.8642217  2.391145
+ [7,] 0.002829761  3.085659 1.0115330  2.607870
+ [8,] 0.915890180  3.764304 1.4471670  3.254050
+ [9,] 1.134329326  4.004773 1.5936432  3.474249
+[10,] 1.376484707  4.316657 1.7421406  3.699448
+[11,] 1.379814589  4.321280 1.7421406  3.699448
+[12,] 1.818514452  5.015942 2.2075257  4.420700
+[13,] 1.972568372  5.305346 2.3720386  4.682284
+[14,] 1.993472522  5.346754 2.3720386  4.682284
+[15,] 2.159465356  5.696018 2.5428143  4.958088
+[16,] 2.384328379  6.238461 2.7209896  5.250935
+[17,] 2.687374258  7.153446 2.9079005  5.564306
+[18,] 2.860531931  7.830148 3.1051539  5.902610
+[19,] 2.933702632  8.169784 3.3147278  6.271588
+[20,] 3.041497970  8.756687 3.3147278  6.271588
+[21,] 3.149613509  9.503283 3.5391176  6.678941
+[22,] 3.292519069 10.988746 3.5391176  6.678941
+[23,] 3.311602828 11.272295 3.7815571  7.135376
+[24,] 3.717589134 33.376842 4.0463677  7.656423
+[25,] 3.836525955 33.376842 4.3395390  8.265854
+[26,] 4.003591043 33.376842 4.6697545  9.002701
+[27,] 4.156142251 33.376842 4.6697545  9.002701
+[28,] 4.226693260 33.376842 4.6697545  9.002701
+[29,] 4.624060013 33.376842 5.5034154 11.218259
+[30,] 5.151578574 33.376842 6.8356098 17.736665
+
+$err
+ sim   pw 
+TRUE TRUE 
+
+> 
+> 
+> 
+> cleanEx()
+> nameEx("qqplot")
+> ### * qqplot
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: qqplot
+> ### Title: Methods for Function qqplot in Package 'distr'
+> ### Aliases: qqplot qqplot-methods qqplot,ANY,ANY-method
+> ###   qqplot,UnivariateDistribution,UnivariateDistribution-method
+> ### Keywords: hplot distribution
+> 
+> ### ** Examples
+> 
+> qqplot(Norm(15,sqrt(30)), Chisq(df=15))
+dev.new(): using pdf(file="Rplots27.pdf")
+> ## some discrete Distributions:
+> P <- Pois(5)
+> B <- Binom(size=2000,prob=5/2000)
+> qqplot(B,P)
+dev.new(): using pdf(file="Rplots28.pdf")
+> ## No test: 
+> ## takes too much time for R CMD check --as-cran
+> qqplot(B,P, nosym.pCI=TRUE)
+dev.new(): using pdf(file="Rplots29.pdf")
+> ## End(No test)
+> ## some Lebesgue-Decomposed distributions:
+> mylist <- UnivarLebDecDistribution(discretePart=Binom(3,.3), acPart=Norm(2,2),
++                acWeight=11/20)
+> mylist2 <- mylist+0.1
+> qqplot(mylist,mylist2)
+dev.new(): using pdf(file="Rplots30.pdf")
+> qqplot(mylist,mylist2,exact.pCI=FALSE,exact.sCI=FALSE)
+dev.new(): using pdf(file="Rplots31.pdf")
+> ## No test: 
+> ## takes too much time for R CMD check --as-cran
+> qqplot(mylist,mylist2,nosym.pCI=TRUE)
+dev.new(): using pdf(file="Rplots32.pdf")
+> ## some ac. distribution with a gap
+> mylist3 <- UnivarMixingDistribution(Unif(0,0.3),Unif(0.6,1),mixCoeff=c(0.8,0.2))
+> gaps(mylist3)
+          [,1]      [,2]
+[1,] 0.3000069 0.5999908
+> mylist4 <- UnivarMixingDistribution(Unif(0,0.3),Unif(0.6,1),mixCoeff=c(0.6,0.4))
+> qqplot(mylist3,mylist4)
+dev.new(): using pdf(file="Rplots33.pdf")
+> qqplot(mylist3,mylist4,nosym.pCI=TRUE)
+dev.new(): using pdf(file="Rplots34.pdf")
+> ## End(No test)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("simplifyD-methods")
+> ### * simplifyD-methods
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: simplifyD-methods
+> ### Title: Methods for function simplifyD in Package 'distr'
+> ### Aliases: simplifyD-methods simplifyD
+> ###   simplifyD,AbscontDistribution-method
+> ###   simplifyD,DiscreteDistribution-method
+> ###   simplifyD,UnivarLebDecDistribution-method
+> ###   simplifyD,UnivarMixingDistribution-method
+> ### Keywords: distribution methods
+> 
+> ### ** Examples
+> 
+> set.seed(123)
+> Mix1 <- UnivarMixingDistribution(Norm(),Binom(2,.3),
++   UnivarLebDecDistribution(acPart = Chisq(df = 2), discretePart = Nbinom(3,.09),
++                            acWeight = 0.3),
++   Norm()-Chisq(df=3), mixCoeff=c(0,0,0.2,0.8), withSimplify = FALSE)
+> Mix2 <- UnivarMixingDistribution(Norm(),Mix1, DExp(2),
++         mixCoeff = c(0,0.2,0.8), withSimplify = FALSE)
+> Mix2        
+An object of class "UnivarMixingDistribution"
+ ---------------------------------------------
+ It consists of  3 components 
+ Components: 
+ [[1]]Distribution Object of Class: Norm
+       :mean: 0
+       :sd: 1
+ [[2]]An object of class "UnivarMixingDistribution"
+       :---------------------------------------------
+       :It consists of  4 components 
+       :Components: 
+       :[[1]]Distribution Object of Class: Norm
+       :      :mean: 0
+       :      :sd: 1
+       :[[2]]Distribution Object of Class: Binom
+       :      :size: 2
+       :      :prob: 0.3
+       :[[3]]An object of class "UnivarLebDecDistribution"
+       :      :--- a Lebesgue decomposed distribution:
+
+       :      :   Its discrete part (with weight 0.700000) is a
+       :      :Distribution Object of Class: Nbinom
+       :      :size: 3
+       :      :prob: 0.09
+       :      :This part is accessible with 'discretePart(<obj>)'.
+
+       :      :   Its absolutely continuous part (with weight 0.300000) is a
+       :      :Distribution Object of Class: Chisq
+       :      :df: 2
+       :      :ncp: 0
+       :      :This part is accessible with 'acPart(<obj>)'.
+       :[[4]]Distribution Object of Class: AbscontDistribution
+       :---------------------------------------------
+       :Weights: 
+       :0.000000       :0.000000       :0.200000       :0.800000       :
+ ---------------------------------------------
+ [[3]]Distribution Object of Class: DExp
+       :rate: 2
+ ---------------------------------------------
+ Weights: 
+ 0.000000 0.200000 0.800000 
+ ---------------------------------------------
+Warning in (new("standardGeneric", .Data = function (object)  :
+  arithmetics on distributions are understood as operations on r.v.'s
+see 'distrARITH()'; for switching off this warning see '?distroptions'
+> simplifyD(Mix2)
+An object of class "UnivarLebDecDistribution"
+ --- a Lebesgue decomposed distribution:
+
+    Its discrete part (with weight 0.028000) is a
+ Distribution Object of Class: DiscreteDistribution
+ This part is accessible with 'discretePart(<obj>)'.
+
+    Its absolutely continuous part (with weight 0.972000) is a
+ Distribution Object of Class: AbscontDistribution
+ This part is accessible with 'acPart(<obj>)'.
+Warning in (new("standardGeneric", .Data = function (object)  :
+  arithmetics on distributions are understood as operations on r.v.'s
+see 'distrARITH()'; for switching off this warning see '?distroptions'
+> 
+> 
+> 
+> cleanEx()
+> nameEx("simplifyr-methods")
+> ### * simplifyr-methods
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: simplifyr-methods
+> ### Title: Methods for Function simplifyr in Package 'distr'
+> ### Aliases: simplifyr-methods simplifyr
+> ###   simplifyr,UnivariateDistribution-method
+> ### Keywords: math distribution arith
+> 
+> ### ** Examples
+> 
+> F <- ( Norm() + Binom() + Pois() + Exp() ) * 2 - 10
+> system.time(r(F)(10^6))
+   user  system elapsed 
+   0.56    0.01    0.78 
+> simplifyr(F, size = 10^6)
+> system.time(r(F)(10^6))
+   user  system elapsed 
+   0.23    0.02    0.32 
+> 
+> 
+> cleanEx()
+> nameEx("standardMethods")
+> ### * standardMethods
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: standardMethods
+> ### Title: Utility to automatically generate accessor and replacement
+> ###   functions
+> ### Aliases: standardMethods
+> ### Keywords: utilities programming
+> 
+> ### ** Examples
+> 
+> setClass("testclass", representation(a = "numeric", b = "character"))
+> standardMethods("testclass")
+if(!isGeneric("a")) setGeneric("a", function(object) standardGeneric("a"))
+if(!isGeneric("b")) setGeneric("b", function(object) standardGeneric("b"))
+setMethod("a", "testclass", function(object) object@a)
+setMethod("b", "testclass", function(object) object@b)
+if(!isGeneric("a<-")) setGeneric("a<-", function(object, value) standardGeneric("a<-"))
+if(!isGeneric("b<-")) setGeneric("b<-", function(object, value) standardGeneric("b<-"))
+setReplaceMethod("a", "testclass", function(object, value){ object@a <- value; object})
+setReplaceMethod("b", "testclass", function(object, value){ object@b <- value; object})
+> 
+> 
+> 
+> ### * <FOOTER>
+> ###
+> cleanEx()
+> options(digits = 7L)
+> base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
+Time elapsed:  115.12 9.2 149.97 NA NA 
+> grDevices::dev.off()
+pdf 
+ 19 
+> ###
+> ### Local variables: ***
+> ### mode: outline-minor ***
+> ### outline-regexp: "\\(> \\)?### [*]+" ***
+> ### End: ***
+> quit('no')

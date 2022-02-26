@@ -1,0 +1,1 @@
+char inputString[] = "Ferhat Erata";

@@ -1,0 +1,17 @@
+digraph "CFG for 'foo' function" {
+	label="CFG for 'foo' function";
+
+	Node0x150c760 [shape=record,color="#b70d28ff", style=filled, fillcolor="#b70d2870",label="{entry:\l  %retval = alloca double, align 8, !store !6\l  %x.addr = alloca double, align 8, !store !7\l  %y.addr = alloca double, align 8, !store !8\l  %a = alloca double, align 8, !store !9\l  store double %x, double* %x.addr, align 8, !store !10\l  store double %y, double* %y.addr, align 8, !store !11\l  %0 = load double, double* %x.addr, align 8, !store !12\l  %1 = load double, double* %y.addr, align 8, !store !13\l  %add = fadd double %1, 6.000000e+00, !store !14\l  %cmp = fcmp olt double %0, %add, !store !15\l  br i1 %cmp, label %if.then, label %if.end4, !store !16\l|{<s0>T|<s1>F}}"];
+	Node0x150c760:s0 -> Node0x154c6b0[label="50.00%" penwidth=1.50];
+	Node0x150c760:s1 -> Node0x154c720[label="50.00%" penwidth=1.50];
+	Node0x154c6b0 [shape=record,color="#3d50c3ff", style=filled, fillcolor="#ef886b70",label="{if.then:                                          \l  %2 = load double, double* %y.addr, align 8, !store !17\l  %mul = fmul double 2.000000e+00, %2, !store !18\l  store double %mul, double* %a, align 8, !store !19\l  %3 = load double, double* %a, align 8, !store !20\l  %cmp1 = fcmp ogt double %3, -2.000000e+00, !store !21\l  br i1 %cmp1, label %if.then2, label %if.end, !store !22\l|{<s0>T|<s1>F}}"];
+	Node0x154c6b0:s0 -> Node0x154d340[label="50.00%" penwidth=1.50];
+	Node0x154c6b0:s1 -> Node0x154d3c0[label="50.00%" penwidth=1.50];
+	Node0x154d340 [shape=record,color="#3d50c3ff", style=filled, fillcolor="#f1ccb870",label="{if.then2:                                         \l  %4 = load double, double* %x.addr, align 8, !store !23\l  %5 = load double, double* %y.addr, align 8, !store !24\l  %mul3 = fmul double %4, %5, !store !25\l  store double %mul3, double* %retval, align 8, !store !26\l  br label %return, !store !27\l}"];
+	Node0x154d340 -> Node0x154dd50[penwidth=2];
+	Node0x154d3c0 [shape=record,color="#3d50c3ff", style=filled, fillcolor="#f1ccb870",label="{if.end:                                           \l  br label %if.end4, !store !28\l}"];
+	Node0x154d3c0 -> Node0x154c720[penwidth=2];
+	Node0x154c720 [shape=record,color="#b70d28ff", style=filled, fillcolor="#d24b4070",label="{if.end4:                                          \l  %6 = load double, double* %x.addr, align 8, !store !29\l  store double %6, double* %retval, align 8, !store !30\l  br label %return, !store !31\l}"];
+	Node0x154c720 -> Node0x154dd50[penwidth=2];
+	Node0x154dd50 [shape=record,color="#b70d28ff", style=filled, fillcolor="#b70d2870",label="{return:                                           \l  %7 = load double, double* %retval, align 8, !store !32\l  ret double %7, !store !33\l}"];
+}

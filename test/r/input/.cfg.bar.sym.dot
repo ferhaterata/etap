@@ -1,0 +1,47 @@
+digraph "CFG for 'bar' function" {
+    label = "CFG for 'bar' function\n %x \<- Norm(mean=11, sd=1); %y \<- Norm(mean=5, sd=1)";
+
+    Node0x1ab53e0 [shape = record,color = "#b70d28ff", style = filled, fillcolor = "#b70d2870",label = "{entry:\l
+	   %retval \<- Unif(-1000,1000)\l
+	   %x.addr \<- Unif(-1000,1000)\l
+	   %y.addr \<- Unif(-1000,1000)\l
+	   %a \<- Unif(-1000,1000)\l
+	   %x.addr \<- %x\l
+	   %y.addr \<- %y\l
+	   %0 \<- %x.addr\l
+	   %1 \<- %y.addr\l
+	   %add \<- %1 + 6.000000e+00\l
+	   %cmp \<- %0 - %add; %cmp \<- p(%cmp)(0)\l
+	   %entry%if.end4 \<- %cmp; %entry%if.then \<- 1 - %cmp\l
+	   |{<s0>T|<s1>F}}"];
+    Node0x1ab53e0: s0 -> Node0x1ab7820 [label = "50.00%" penwidth = 1.50];
+    Node0x1ab53e0: s1 -> Node0x1ab7890 [label = "50.00%" penwidth = 1.50];
+    Node0x1ab7820 [shape = record,color = "#3d50c3ff", style = filled, fillcolor = "#ef886b70",label = "{if.then:                                          \l
+       %2 \<- %y.addr\l
+       %mul \<- 2.000000e+00 * %2\l
+       %a \<- %mul\l
+       %3 \<- %a\l
+       %cmp1 \<- %3 - -2.000000e+00; %cmp1 \<- 1 - p(%cmp1)(0)\l
+       %if.then%if.end \<- %cmp1; %if.then%if.then2 \<- 1 - %cmp1\l
+       |{<s0>T|<s1>F}}"];
+    Node0x1ab7820: s0 -> Node0x1ab97f0 [label = "50.00%" penwidth = 1.50];
+    Node0x1ab7820: s1 -> Node0x1ab9870 [label = "50.00%" penwidth = 1.50];
+    Node0x1ab97f0 [shape = record,color = "#3d50c3ff", style = filled, fillcolor = "#f1ccb870",label = "{if.then2:                                         \l
+    %4 \<- %x.addr\l
+    %5 \<- %y.addr\l
+    %mul3 \<- %4 * %5\l
+    %retval \<- %mul3\l
+    %if.then2%return \<- 1.00\l}"];
+    Node0x1ab97f0 -> Node0x1ab0d90 [penwidth = 2];
+    Node0x1ab9870 [shape = record,color = "#3d50c3ff", style = filled, fillcolor = "#f1ccb870",label = "{if.end:                                           \l
+    %if.end%if.end4 \<- 1.00\l}"];
+    Node0x1ab9870 -> Node0x1ab7890 [penwidth = 2];
+    Node0x1ab7890 [shape = record,color = "#b70d28ff", style = filled, fillcolor = "#d24b4070",label = "{if.end4:                                          \l
+    %6 \<- %x.addr\l
+    %retval \<- %6\l
+    %if.end4%return \<- 1.00\l}"];
+    Node0x1ab7890 -> Node0x1ab0d90 [penwidth = 2];
+    Node0x1ab0d90 [shape = record,color = "#b70d28ff", style = filled, fillcolor = "#b70d2870",label = "{return:                                           \l
+    %7 \<- %retval\l
+    %ret \<- %7\l}"];
+}

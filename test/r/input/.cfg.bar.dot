@@ -1,0 +1,17 @@
+digraph "CFG for 'bar' function" {
+	label="CFG for 'bar' function";
+
+	Node0x154ef90 [shape=record,color="#b70d28ff", style=filled, fillcolor="#b70d2870",label="{entry:\l  %retval = alloca i32, align 4, !store !6\l  %x.addr = alloca i32, align 4, !store !7\l  %y.addr = alloca i32, align 4, !store !8\l  %a = alloca i32, align 4, !store !9\l  store i32 %x, i32* %x.addr, align 4, !store !10\l  store i32 %y, i32* %y.addr, align 4, !store !11\l  %0 = load i32, i32* %x.addr, align 4, !store !12\l  %1 = load i32, i32* %y.addr, align 4, !store !13\l  %add = add nsw i32 %1, 6, !store !14\l  %cmp = icmp slt i32 %0, %add, !store !15\l  br i1 %cmp, label %if.then, label %if.end4, !store !16\l|{<s0>T|<s1>F}}"];
+	Node0x154ef90:s0 -> Node0x15519e0[label="50.00%" penwidth=1.50];
+	Node0x154ef90:s1 -> Node0x1551a50[label="50.00%" penwidth=1.50];
+	Node0x15519e0 [shape=record,color="#3d50c3ff", style=filled, fillcolor="#ef886b70",label="{if.then:                                          \l  %2 = load i32, i32* %y.addr, align 4, !store !17\l  %mul = mul nsw i32 2, %2, !store !18\l  store i32 %mul, i32* %a, align 4, !store !19\l  %3 = load i32, i32* %a, align 4, !store !20\l  %cmp1 = icmp sge i32 %3, 8, !store !21\l  br i1 %cmp1, label %if.then2, label %if.end, !store !22\l|{<s0>T|<s1>F}}"];
+	Node0x15519e0:s0 -> Node0x1553ad0[label="50.00%" penwidth=1.50];
+	Node0x15519e0:s1 -> Node0x1553b50[label="50.00%" penwidth=1.50];
+	Node0x1553ad0 [shape=record,color="#3d50c3ff", style=filled, fillcolor="#f1ccb870",label="{if.then2:                                         \l  %4 = load i32, i32* %x.addr, align 4, !store !23\l  %5 = load i32, i32* %y.addr, align 4, !store !24\l  %mul3 = mul nsw i32 %4, %5, !store !25\l  store i32 %mul3, i32* %retval, align 4, !store !26\l  br label %return, !store !27\l}"];
+	Node0x1553ad0 -> Node0x154ae10[penwidth=2];
+	Node0x1553b50 [shape=record,color="#3d50c3ff", style=filled, fillcolor="#f1ccb870",label="{if.end:                                           \l  br label %if.end4, !store !28\l}"];
+	Node0x1553b50 -> Node0x1551a50[penwidth=2];
+	Node0x1551a50 [shape=record,color="#b70d28ff", style=filled, fillcolor="#d24b4070",label="{if.end4:                                          \l  %6 = load i32, i32* %x.addr, align 4, !store !29\l  store i32 %6, i32* %retval, align 4, !store !30\l  br label %return, !store !31\l}"];
+	Node0x1551a50 -> Node0x154ae10[penwidth=2];
+	Node0x154ae10 [shape=record,color="#b70d28ff", style=filled, fillcolor="#b70d2870",label="{return:                                           \l  %7 = load i32, i32* %retval, align 4, !store !32\l  ret i32 %7, !store !33\l}"];
+}

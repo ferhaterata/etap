@@ -1,0 +1,195 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"childIndexes" : 
+					[
+						1
+					],
+					"jsonFile" : "directory-.-Debug-f5ebdc15457944623624.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.4"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5,
+						6,
+						7,
+						8,
+						9,
+						10,
+						11,
+						12
+					]
+				},
+				{
+					"build" : "input",
+					"jsonFile" : "directory-input-Debug-b46ac8954c17d8ebeb8e.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.4"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 1,
+					"source" : "input"
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"childIndexes" : 
+					[
+						1
+					],
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "standalone-application",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5,
+						6,
+						7,
+						8,
+						9,
+						10,
+						11,
+						12
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						1
+					],
+					"name" : "prob-sym-exec-tests",
+					"parentIndex" : 0
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "BlockSplitterPass::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-BlockSplitterPass-Debug-ecaf4f841449d0fe8711.json",
+					"name" : "BlockSplitterPass",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "ConfigPass::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-ConfigPass-Debug-66046b5f094d709e524d.json",
+					"name" : "ConfigPass",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "CostModelPass::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-CostModelPass-Debug-27b3fe22255bdf1fe715.json",
+					"name" : "CostModelPass",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "JitPass::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-JitPass-Debug-0fb1702dcd2cdeebfa17.json",
+					"name" : "JitPass",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "Msp430::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-Msp430-Debug-b62311a141fe1519c716.json",
+					"name" : "Msp430",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "NEAnalysisPass::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-NEAnalysisPass-Debug-2a7ce0a4ebb54e0ffc2a.json",
+					"name" : "NEAnalysisPass",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "ProbabilisticSymbolicExecution::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-ProbabilisticSymbolicExecution-Debug-3bb625a4abb27deb1de3.json",
+					"name" : "ProbabilisticSymbolicExecution",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "Reporter::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-Reporter-Debug-04c067cbec218b6efd74.json",
+					"name" : "Reporter",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "Utility::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-Utility-Debug-e561a4ea23d07caf353b.json",
+					"name" : "Utility",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "acc_gen::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-acc_gen-Debug-5f212123e90845311c8d.json",
+					"name" : "acc_gen",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "intrinsics_gen::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-intrinsics_gen-Debug-b49087ba6423b3ea8aca.json",
+					"name" : "intrinsics_gen",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "msp430::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-msp430-Debug-d281c447904c91bd2aa7.json",
+					"name" : "msp430",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "omp_gen::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-omp_gen-Debug-1a280d983a20d0a089ac.json",
+					"name" : "omp_gen",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/home/ferhat/git/etap",
+		"source" : "/home/ferhat/git/etap"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 3
+	}
+}

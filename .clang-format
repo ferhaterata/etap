@@ -1,0 +1,6 @@
+# https://clang.llvm.org/docs/ClangFormatStyleOptions.html
+BasedOnStyle: Google
+# PointerAlignment: Right
+DerivePointerAlignment: false
+# BinPackParameters: false
+# AlignConsecutiveAssignments: false

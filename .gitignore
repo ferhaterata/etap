@@ -1,20 +1,58 @@
+reated by .ignore support plugin (hsz.mobi)
+### C template
 # Prerequisites
 *.d
 
-# Compiled Object files
-*.slo
-*.lo
+# Object files
 *.o
+*.ko
 *.obj
+*.elf
+
+# Linker output
+*.ilk
+*.map
+*.exp
 
 # Precompiled Headers
 *.gch
 *.pch
 
-# Compiled Dynamic libraries
-*.so
-*.dylib
+# Libraries
+*.lib
+*.a
+*.la
+*.lo
+
+# Shared objects (inc. Windows DLLs)
 *.dll
+*.so
+*.so.*
+*.dylib
+*.slo
+
+# Executables
+*.exe
+*.out
+*.app
+*.i*86
+*.x86_64
+*.hex
+
+# Debug files
+*.dSYM/
+*.su
+*.idb
+*.pdb
+
+# Kernel Module Compile Results
+*.mod*
+*.cmd
+.tmp_versions/
+modules.order
+Module.symvers
+Mkfile.old
+dkms.conf
 
 # Fortran module files
 *.mod
@@ -22,11 +60,43 @@
 
 # Compiled Static libraries
 *.lai
-*.la
-*.a
-*.lib
 
-# Executables
-*.exe
-*.out
-*.app
+### CMake template
+CMakeLists.txt.user
+CMakeCache.txt
+CMakeFiles
+CMakeScripts
+Testing
+Makefile
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+CTestTestfile.cmake
+_deps
+*.cbp
+.idea/
+
+Reporter
+Utility
+Calculate
+passes
+.dots
+.temp
+.output*
+.model
+.llvm
+clang
+Rplots.pdf
+.RDataFiles
+.vscode
+
+# Code Composer Studio
+# http://processors.wiki.ti.com/index.php/Source_control_with_CCS
+Debug/
+Debug__TI/
+Debug__GNU/
+Release/
+.xdchelp
+.config/
+.launches/
+.project

@@ -1,0 +1,751 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Vignette  "How to generate new distributions in packages distr, distrEx"
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%\VignetteIndexEntry{newDistributions}
+%\VignetteDepends{startupmsg}
+%\VignetteKeywords{probability distribution,estimation}
+%\VignettePackage{distr}                     
+%\VignetteEngine{knitr::knitr}
+%
+%
+%
+\documentclass[10pt]{article}
+%
+%use svn-multi to fill in revision information
+%
+\usepackage{svn-multi}
+% Version control information:
+\svnidlong
+{$HeadURL: svn+ssh://ruckdeschel@svn.r-forge.r-project.org/svnroot/distr/pkg/distr/vignettes/newDistributions-knitr.Rnw $}
+{$LastChangedDate: 2019-03-01 17:00:34 +0100 (Fr, 01 Mrz 2019) $}
+{$LastChangedRevision: 1298 $}
+{$LastChangedBy: ruckdeschel $}
+%\svnid{$Id: example_main.tex 146 2008-12-03 13:29:19Z martin $}
+% Don't forget to set the svn property 'svn:keywords' to
+% 'HeadURL LastChangedDate LastChangedRevision LastChangedBy' or
+% 'Id' or both depending if you use \svnidlong and/or \svnid
+%
+\newcommand{\svnfooter}{Last Changed Rev: \svnkw{LastChangedRevision}}
+\svnRegisterAuthor{ruckdeschel}{Peter Ruckdeschel}
+\svnRegisterAuthor{stamats}{Matthias Kohl}
+\svnRegisterAuthor{florian}{Florian Camphausen}
+\svnRegisterAuthor{stabla}{Thomas Stabla}
+\svnRegisterAuthor{anhuel}{Anja H{\"u}ller}
+\svnRegisterAuthor{ifrin}{Eleonara Feist}
+\svnRegisterAuthor{jdospina}{Juan David Ospina}
+\svnRegisterAuthor{kowzar}{Kouros Owzar}
+%
+\usepackage{geometry}
+%
+\usepackage{color}
+\definecolor{darkblue}{rgb}{0.0,0.0,0.75}
+\definecolor{distrCol}{rgb}{0.0,0.4,0.4}
+\definecolor{Rcolor}{rgb}{0.0,0.5,0.5}
+%
+\usepackage{ifpdf}
+%
+\usepackage{url}
+\usepackage{amssymb}
+\usepackage[%
+baseurl={r-forge.r-project.org},%
+pdftitle={How to generate new distributions in packages distr, distrEx},%
+pdfauthor={Peter Ruckdeschel, Matthias Kohl},%
+pdfsubject={distr},%
+pdfkeywords={probability distribution,simulation,estimation},%
+pagebackref,bookmarks,colorlinks,linkcolor=darkblue,citecolor=darkblue,%
+pagecolor=darkblue,raiselinks,plainpages,pdftex]{hyperref}
+%
+\markboth{\sl How to generate new distributions in packages ``{\tt distr}'', ``{\tt distrEx}''}%
+{\sl How to generate new distributions in packages ``{\tt distr}'', ``{\tt distrEx}''}
+%
+% -------------------------------------------------------------------------------
+\newcommand{\Reals}{\mathbb{R}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+%
+% -------------------------------------------------------------------------------
+\RequirePackage{fancyvrb}
+\RequirePackage{listings}
+%\usepackage{Sweave} no longer needed
+% -------------------------------------------------------------------------------
+%%\SweaveOpts{keep.source=TRUE}
+% -------------------------------------------------------------------------------
+%%
+%% ------------------------------------------------------------------------------
+%% before version 2.7, we used package SweaveListingUtils for syntax highlighting
+%% from version 2.7 on, we switch to knitR
+%% ------------------------------------------------------------------------------
+%%
+%%#(ll)SweaveListingsPreparations, results="asis", echo=FALSE(ggeq)
+%%#require(SweaveListingUtils)
+%%#SweaveListingPreparations()
+%%#setToBeDefinedPkgs(pkgs = c("distr","distrEx"),
+%%#                   keywordstyles = "\\bf\\color{distrCol}")
+%%#(at)
+%%
+%
+% -------------------------------------------------------------------------------
+\begin{document}
+% -------------------------------------------------------------------------------
+%% ------------------------------------------------------------------------------
+<<knitRPreparations,include=FALSE>>=
+library(knitr)
+opts_chunk$set(tidy=FALSE)
+@
+% -------------------------------------------------------------------------------
+\lstdefinelanguage{Rd}[common]{TeX}%
+{moretexcs={acronym,alias,arguments,author,bold,cite,%
+          code,command,concept,cr,deqn,describe,%
+          description,details,dfn,doctype,dots,%
+          dontrun,dontshow,donttest,dQuote,%
+          email,emph,enc,encoding,enumerate,env,eqn,%
+          examples,file,format,if,ifelse,item,itemize,kbd,keyword,%
+          ldots,link,linkS4class,method,name,note,%
+          option,out,pkg,preformatted,R,Rdopts,Rdversion,%
+          references,S3method,S4method,Sexpr,samp,section,%
+          seealso,source,sp,special,sQuote,strong,%
+          subsection,synopsis,tab,tabular,testonly,%
+          title,url,usage,value,var,verb},
+   sensitive=true,%
+   morecomment=[l]\%% 2008/9 Peter Ruckdeschel
+}[keywords,comments]%%
+\lstdefinestyle{Rdstyle}{fancyvrb=TRUE,language=Rd, keywordstyle={\bf},%
+         basicstyle={\color{black}\footnotesize},%
+         commentstyle={\ttfamily\itshape},%
+         alsolanguage=R}%
+\global\def\Rdlstset{\lstset{style=Rdstyle}}%
+% -------------------------------------------------------------------------------
+\lstset{language=R,basicstyle={\color{Rcolor}\footnotesize},keywordstyle={\bf}}
+\let\code\lstinline
+\def\Code#1{{\tt\color{Rcolor} #1}}
+\def\file#1{{\tt #1}}
+\def\pkg#1{{\tt"#1"}}
+\newcommand{\pkgversion}{{\tt 2.7}}
+% -------------------------------------------------------------------------------
+\title{How to generate new distributions in packages \pkg{distr}, \pkg{distrEx}}
+%,version \pkgExversion}
+\author{\small Peter Ruckdeschel\thanks{Universit\"at Oldenburg, Oldenburg}
+\\[-.5ex]
+\small Matthias Kohl\thanks{FH Furtwangen}
+\smallskip\\
+\small Institut f\"ur Mathematik\\[-0.5ex]
+\small Fakult\"at V - Mathematik und Naturwissenschaften\\[-.5ex]
+\small Carl von Ossietzky Universit\"at Oldenburg\\[-0.5ex]
+\small PObox 2503\\[-.5ex]
+\small 26111 Oldenburg (Oldb)\\[-.5ex]
+\small Germany\\
+\small e-Mail: {\small \tt peter.ruckdeschel@uni-oldenburg.de}\medskip\\
+\parbox[t]{5cm}{
+\footnotesize\sffamily
+ Version control information:
+\begin{tabbing}
+\footnotesize\sffamily
+ Last changes revision: \= \kill
+ Head URL: \> \parbox[t]{6cm}{\url{\svnkw{HeadURL}}}\\[1.2ex]
+ Last changed date: \> \svndate\\
+ Last changes revision: \> \svnrev\\
+ Version: \> \svnFullRevision*{\svnrev}\\
+ Last changed by: \> \svnFullAuthor*{\svnauthor}\\
+\end{tabbing}
+}}
+
+\maketitle
+% -------------------------------------------------------------------------------
+\begin{abstract}
+% -------------------------------------------------------------------------------
+In this vignette, we give short examples how to produce new
+distributions in packages \pkg{distr} and \pkg{distrEx}.
+This vignette refers to package version~\pkgversion.
+% -------------------------------------------------------------------------------
+\end{abstract}
+% -------------------------------------------------------------------------------
+Basically there are three ways to produce new
+distributions in packages \pkg{distr} and \pkg{distrEx}:
+\begin{enumerate}
+\item automatic generation of single distribution objects by arithmetics and the like
+\item using generating functions to produce single distribution objects
+\item defining new distribution classes / doing it from scratch
+\end{enumerate}
+We will give short examples of all three of them.
+% -------------------------------------------------------------------------------
+\section{Automatic generation by arithmetics and the like}
+% -------------------------------------------------------------------------------
+We have made available quite general arithmetical operations to our distribution 
+objects, generating new image distribution objects automatically. As an example, try
+<<Prepa0, include=FALSE, results="hide">>=
+require(distr)
+@
+<<Prepa, echo=FALSE, results="asis">>=
+## preparation: set option withSweave to TRUE
+require(distr)
+distroptions(withSweave = TRUE)
+options(width=70)
+@
+%
+<<exam1, eval = TRUE, fig.width=8.0, fig.height=6.5>>=
+require(distr)
+N <- Norm(mean = 2, sd = 1.3)
+P <- Pois(lambda = 1.2)
+Z <- 2*N + 3 + P
+Z
+plot(Z, panel.first = grid(), lwd=3)
+p(Z)(0.4)
+q(Z)(0.3)
+## in RStudio or Jupyter IRKernel, use q.l(.)(.) instead of q(.)(.)
+Zs <- r(Z)(50)
+Zs
+@
+\par
+\noindent{\bf Comment:}\\
+Let \code{N} an object of class \code{"Norm"} with parameters  \code{mean=2},
+\code{sd=1.3} and let \code{P}  an object of class \code{"Pois"} with parameter 
+\code{lambda=1.2}. Assigning to \code{Z} the expression \code{2*N+3+P}, a 
+new distribution object is generated ---of class \code{"AbscontDistribution"} in 
+our case--- so that identifying \code{N}, \code{P}, \code{Z} with random 
+variables distributed according to {\tt N}, {\tt P}, {\tt Z}, 
+${\cal L}({\tt Z})={\cal L}(2*{\tt N}+3+{\tt P})$,  and writing \code{p(Z)(0.4)}  
+we get $P(Z\leq 0.4)$, \code{ q(Z)(0.3)}  the $30\%$-quantile of {\tt Z},
+and with \code{r(Z)(50)} we generate $50$ pseudo random numbers distributed 
+according to {\tt Z}, while the \code{plot} command generates the above figure.\\
+
+In the environments of \texttt{RStudio}, see \url{https://www.rstudio.com/} and
+\texttt{Jupyter IRKernel}, see \url{https://github.com/IRkernel/IRkernel},
+calls to \code{q} are caught away from standard {\sf R} evaluation and are treated
+in a non-standard way. This non-standard evaluation in particular throws
+errors at calls to our accessor methods \code{q} to slot \code{q} of the
+respective distribution object. To amend this, from version 2.6 on,
+we provide function \code{q.l} (for left-continuous quantile function)
+as alias to our accessors \code{q}, so that all our package functionality also
+becomes available in \texttt{RStudio} and \texttt{IRKernel}.\\
+
+There are caveats to take care about; for details refer to the (larger) vignette
+{\tt distr} in package \pkg{distrDoc}.
+% -------------------------------------------------------------------------------
+\section{Using generating functions}
+% -------------------------------------------------------------------------------
+If you want to generate a single distribution object (without any particular parameter)
+generating functions are the method of choice:\\
+
+
+Objects of classes \code{LatticeDistribution} resp.\ 
+\code{DiscreteDistribution}, 
+\code{AbscontDistribution},  may be generated using the generating functions
+\code{LatticeDistribution()} resp.\ \code{DiscreteDistribution()}
+resp.\ \code{AbscontDistribution()}; see also
+the corresponding help.\\
+
+E.g., to produce a discrete distribution with
+support $(1,5,7,21)$ with corresponding probabilities $(0.1,0.1,0.6,0.2)$
+we may write
+<<DiscrDist, eval = TRUE>>=
+D <- DiscreteDistribution(supp = c(1,5,7,21), prob = c(0.1,0.1,0.6,0.2))
+D
+plot(D, panel.first = grid(lwd=2), lwd = 3)
+@
+%
+and to generate an absolutely continuous distribution with density proportional
+to $e^{-|x|^3}$, we write
+<<AbscDist, eval = TRUE>>=
+AC <- AbscontDistribution(d = function(x) exp(-abs(x)^3), withStand = TRUE)
+AC
+plot(AC, panel.first = grid(lwd=2), lwd = 3)
+@
+%
+% -------------------------------------------------------------------------------
+\section{Doing it from scratch}
+% -------------------------------------------------------------------------------
+If you would like to create new parametric distributions, using already 
+implemented {\tt r}, {\tt d}, {\tt p}, and {\tt q} functions
+(e.g.\ implementing additional distributions realized in another 
+\href{https://cran.r-project.org}{\tt CRAN} package),
+you should probably envisage introducing new distribution {\tt S4} (sub-)classes
+and hence better look at the implementation of some discrete and 
+continuous parametric distribution classes in package \pkg{distr}.
+
+\noindent{\small Hint: download the {\tt .tar.gz} file; extract it to some {\tt temp} 
+folder; look at subdirectories {\tt R} and {\tt man}}\smallskip\\
+
+The general procedure is as follows
+
+\begin{enumerate}
+\item introduce a  new subclass of  class \code{Parameter}
+\item introduce a new subclass of  \code{LatticeDistribution}/%
+\code{DiscreteDistribution} (if discrete)
+ or of class \code{AbscontDistribution} (if continuous).
+\item define accessor and replacement functions for the ``slots'' of the
+parameter (e.g.\ \code{"size"} and \code{"prob"} in the binomial case), 
+possibly with new generics
+\item (possibly) define a validity function
+\item define a generating function
+\item if existing, define particular convolution methods or similar particular
+methods for this new distribution class
+\item create {\tt .Rd} files for the
+\begin{itemize}
+      \item parameter class
+      \item distribution class
+\end{itemize}
+\item if analytic expressions are available, define particular \code{E}-, \code{var}-, 
+\code{skewness}-, and \code{kurtosis}-methods
+     and if so, also document\footnote{%
+%
+this is new, because so far, all \code{E}-, \code{var}-, 
+\code{skewness}-, and \code{kurtosis}-methods for ``basic'' 
+distributions are documented in the \pkg{distrEx} documentation to 
+\code{E}, \code{var}, \ldots, but this would not be operational
+any longer for new derived classes, possibly defined in other, new packages
+%
+     } the corresponding methods in
+     the distribution class {\tt .Rd} file\\
+\end{enumerate}
+    
+Let's go through the steps in the example case of the Binomial implementation
+in packages \pkg{distr} and \pkg{distrEx}:
+
+\begin{enumerate}
+%
+\item in \pkg{distr}, see source in \file{R/AllClasses.R},  
+%
+<<AllClass1, results="asis", echo=TRUE>>=
+## Class: BinomParameter
+setClass("BinomParameter",
+          representation = representation(size = "numeric", prob = "numeric"),
+          prototype = prototype(size = 1, prob = 0.5, name =
+                      gettext("Parameter of a Binomial distribution")
+                      ),
+          contains = "Parameter"
+          )
+@
+%
+\item in \pkg{distr}, see source in \file{R/AllClasses.R},  
+%
+<<AllClass2, results="asis", echo=TRUE>>=
+## Class: binomial distribution
+setClass("Binom",
+          prototype = prototype(
+                      r = function(n){ rbinom(n, size = 1,prob = 0.5) },
+                      d = function(x, log = FALSE){
+                              dbinom(x, size = 1, prob = 0.5, log = log)
+                                          },
+                      p = function(q, lower.tail = TRUE, log.p = FALSE ){
+                              pbinom(q, size = 1, prob = 0.5,
+                                     lower.tail = lower.tail, log.p = log.p)
+                                          },
+                      q = function(p, lower.tail = TRUE, log.p = FALSE ){
+                              qbinom(p, size = 1, prob = 0.5,
+                                     lower.tail = lower.tail, log.p = log.p)
+                                          },
+                      img = new("Naturals"),
+                      param = new("BinomParameter"),
+                      support = 0:1,
+                      lattice = new("Lattice",
+                                pivot = 0, width = 1, Length = 2, name =
+                                gettext(
+                                  "lattice of a Binomial distribution"
+                                       )
+                                ),
+                     .logExact = TRUE,
+                     .lowerExact = TRUE
+                      ),
+          contains = "LatticeDistribution"
+          )
+@
+%
+\item in \pkg{distr}, see source in \file{R/BinomialDistribution.R},  
+%
+<<BinomDist1, results="asis", echo=TRUE>>=
+## Access Methods
+setMethod("size", "BinomParameter", function(object) object@size)
+setMethod("prob", "BinomParameter", function(object) object@prob)
+## Replace Methods
+setReplaceMethod("size", "BinomParameter",
+                  function(object, value){ object@size <- value; object})
+setReplaceMethod("prob", "BinomParameter",
+                  function(object, value){ object@prob <- value; object})
+@
+%
+and \file{R/AllGenerics}, 
+<<AllGenerics, results="asis", echo=TRUE>>=
+if(!isGeneric("size"))
+   setGeneric("size", function(object) standardGeneric("size"))
+if(!isGeneric("prob"))
+   setGeneric("prob", function(object) standardGeneric("prob"))
+@
+%
+\item in \pkg{distr}, see source in \file{R/BinomialDistribution.R},  
+%
+<<BinomDist2, results="asis", echo=TRUE>>=
+setValidity("BinomParameter", function(object){
+  if(length(prob(object)) != 1)
+    stop("prob has to be a numeric of length 1")
+  if(prob(object) < 0)
+    stop("prob has to be in [0,1]")
+  if(prob(object) > 1)
+    stop("prob has to be in [0,1]")
+  if(length(size(object)) != 1)
+    stop("size has to be a numeric of length 1")
+  if(size(object) < 1)
+    stop("size has to be a natural greater than 0")
+  if(!identical(floor(size(object)), size(object)))
+    stop("size has to be a natural greater than 0")
+  else return(TRUE)
+})
+@
+%
+\item in \pkg{distr}, see source in \file{R/BinomialDistribution.R},  
+%
+<<BinomDist3, results="asis", echo=TRUE>>=
+Binom <- function(size = 1,prob = 0.5) new("Binom", size = size, prob = prob)
+@
+%
+\item in \pkg{distr}, see source in \file{R/BinomialDistribution.R},  
+%
+<<BinomDist4, results="asis", echo=TRUE>>=
+## Convolution for two binomial distributions Bin(n1,p1) and Bin(n2,p2)
+## Distinguish cases
+## p1 == p2 und p1 != p2
+
+
+setMethod("+", c("Binom","Binom"),
+          function(e1,e2){
+            newsize <- size(e1) + size(e2)
+
+            if(isTRUE(all.equal(prob(e1),prob(e2))))
+               return(new("Binom", prob = prob(e1), size = newsize,
+                          .withArith = TRUE))
+
+            return(as(e1, "LatticeDistribution") + e2)
+          })
+@
+%
+\item in \pkg{distr}, see sources in
+%
+\begin{itemize}
+%
+\item\file{man/BinomParameter-class.Rd}
+%
+\begin{lstlisting}[style = Rdstyle]
+\name{BinomParameter-class}
+\docType{class}
+\alias{BinomParameter-class}
+\alias{initialize,BinomParameter-method}
+
+\title{Class "BinomParameter"}
+\description{ The parameter of a binomial distribution, used by Binom-class}
+\section{Objects from the Class}{
+Objects can be created by calls of the form
+      \code{new("BinomParameter", prob, size)}.
+Usually an object of this class is not needed on its own, it is generated
+automatically when an object of the class Binom
+is instantiated.
+}
+\section{Slots}{
+  \describe{
+    \item{\code{prob}}{Object of class \code{"numeric"}:
+          the probability of a binomial distribution }
+    \item{\code{size}}{Object of class \code{"numeric"}:
+          the size of a binomial distribution }
+    \item{\code{name}}{Object of class \code{"character"}:
+          a name / comment for the parameters }
+  }
+}
+\section{Extends}{
+Class \code{"Parameter"}, directly.
+}
+\section{Methods}{
+  \describe{
+    \item{initialize}{\code{signature(.Object = "BinomParameter")}:
+          initialize method }
+    \item{prob}{\code{signature(object = "BinomParameter")}: returns the slot
+          \code{prob} of the parameter of the distribution }
+    \item{prob<-}{\code{signature(object = "BinomParameter")}: modifies the slot
+          \code{prob} of the parameter of the distribution }
+    \item{size}{\code{signature(object = "BinomParameter")}: returns the slot
+          \code{size} of the parameter of the distribution }
+    \item{size<-}{\code{signature(object = "BinomParameter")}: modifies the slot
+          \code{size} of the parameter of the distribution}
+  }
+}
+
+\author{
+  Thomas Stabla \email{statho3@web.de},\cr
+  Florian Camphausen \email{fcampi@gmx.de},\cr
+  Peter Ruckdeschel \email{peter.ruckdeschel@uni-oldenburg.de},\cr
+  Matthias Kohl \email{Matthias.Kohl@stamats.de}
+  }
+
+
+\seealso{
+\code{\link{Binom-class}}
+\code{\link{Parameter-class}}
+}
+
+\examples{
+W <- new("BinomParameter",prob=0.5,size=1)
+size(W) # size of this distribution is 1.
+size(W) <- 2 # size of this distribution is now 2.
+}
+\keyword{distribution}
+\concept{parameter}
+\concept{Binomial distribution}
+\concept{S4 parameter class}
+\end{lstlisting}
+
+%
+\item\file{man/Binom-class.Rd}
+\begin{lstlisting}[style = Rdstyle]
+\name{Binom-class}
+\docType{class}
+\alias{Binom-class}
+\alias{Binom}
+\alias{initialize,Binom-method}
+
+\title{Class "Binom" }
+\description{The binomial distribution with \code{size} \eqn{= n}, by default
+  \eqn{=1}, and
+  \code{prob} \eqn{= p}, by default \eqn{=0.5}, has density
+  \deqn{p(x) = {n \choose x} {p}^{x} {(1-p)}^{n-x}}{
+    p(x) = choose(n,x) p^x (1-p)^(n-x)}
+  for \eqn{x = 0, \ldots, n}.
+
+  C.f.\code{\link[stats:Binomial]{rbinom}}
+}
+\section{Objects from the Class}{
+Objects can be created by calls of the form \code{Binom(prob, size)}.
+This object is a binomial distribution.
+}
+\section{Slots}{
+  \describe{
+    \item{\code{img}}{Object of class \code{"Naturals"}: The space of the
+     image of this distribution has got dimension 1 and the
+     name "Natural Space". }
+    \item{\code{param}}{Object of class \code{"BinomParameter"}: the parameter
+          of this distribution (\code{prob}, \code{size}), declared at its
+          instantiation }
+    \item{\code{r}}{Object of class \code{"function"}: generates random
+          numbers (calls function \code{rbinom}) }
+    \item{\code{d}}{Object of class \code{"function"}: density function (calls
+          function \code{dbinom}) }
+    \item{\code{p}}{Object of class \code{"function"}: cumulative function
+          (calls function \code{pbinom}) }
+    \item{\code{q}}{Object of class \code{"function"}: inverse of the
+           cumulative function (calls function \code{qbinom}).
+    The quantile is defined as the smallest value x such that F(x) >= p, where
+            F is the cumulative function. }
+    \item{\code{support}}{Object of class \code{"numeric"}: a (sorted)
+            vector containing the support of the discrete density function}
+    \item{\code{.withArith}}{logical: used internally to issue warnings as to
+            interpretation of arithmetics}
+    \item{\code{.withSim}}{logical: used internally to issue warnings as to
+          accuracy}
+    \item{\code{.logExact}}{logical: used internally to flag the case where
+    there are explicit formulae for the log version of density, cdf, and
+    quantile function}
+    \item{\code{.lowerExact}}{logical: used internally to flag the case where
+    there are explicit formulae for the lower tail version of cdf and quantile
+    function}
+    \item{\code{Symmetry}}{object of class \code{"DistributionSymmetry"};
+     used internally to avoid unnecessary calculations.}
+  }
+}
+\section{Extends}{
+Class \code{"DiscreteDistribution"}, directly.\cr
+Class \code{"UnivariateDistribution"}, by class \code{"DiscreteDistribution"}.\cr
+Class \code{"Distribution"}, by class \code{"DiscreteDistribution"}.
+}
+\section{Methods}{
+  \describe{
+    \item{+}{\code{signature(e1 = "Binom", e2 = "Binom")}: For two binomial
+             distributions with equal probabilities the exact convolution
+             formula is implemented thereby improving the general numerical
+             accuracy.}
+    \item{initialize}{\code{signature(.Object = "Binom")}: initialize method }
+    \item{prob}{\code{signature(object = "Binom")}: returns the slot \code{prob}
+             of the parameter of the distribution }
+    \item{prob<-}{\code{signature(object = "Binom")}: modifies the slot
+             \code{prob} of the parameter of the distribution }
+    \item{size}{\code{signature(object = "Binom")}: returns the slot \code{size}
+             of the parameter of the distribution }
+    \item{size<-}{\code{signature(object = "Binom")}: modifies the slot
+             \code{size} of the parameter of the distribution }
+  }
+}
+
+
+\author{
+  Thomas Stabla \email{statho3@web.de},\cr
+  Florian Camphausen \email{fcampi@gmx.de},\cr
+  Peter Ruckdeschel \email{peter.ruckdeschel@uni-oldenburg.de},\cr
+  Matthias Kohl \email{Matthias.Kohl@stamats.de}
+  }
+
+
+\seealso{
+\code{\link{BinomParameter-class}}
+\code{\link{DiscreteDistribution-class}}
+\code{\link{Naturals-class}}
+\code{\link[stats:Binomial]{rbinom}}
+}
+\examples{
+B <- Binom(prob=0.5,size=1) # B is a binomial distribution with prob=0.5 and size=1.
+r(B)(1) # # one random number generated from this distribution, e.g. 1
+d(B)(1) # Density of this distribution is  0.5 for x=1.
+p(B)(0.4) # Probability that x<0.4 is 0.5.
+q(B)(.1) # x=0 is the smallest value x such that p(B)(x)>=0.1.
+## in RStudio or Jupyter IRKernel, use q.l(.)(.) instead of q(.)(.)
+size(B) # size of this distribution is 1.
+size(B) <- 2 # size of this distribution is now 2.
+C <- Binom(prob = 0.5, size = 1) # C is a binomial distribution with prob=0.5 and size=1.
+D <- Binom(prob = 0.6, size = 1) # D is a binomial distribution with prob=0.6 and size=1.
+E <- B + C # E is a binomial distribution with prob=0.5 and size=3.
+F <- B + D # F is an object of class LatticeDistribution.
+G <- B + as(D,"DiscreteDistribution") ## DiscreteDistribution
+}
+\keyword{distribution}
+\concept{discrete distribution}
+\concept{lattice distribution}
+\concept{Binomial family}
+\concept{Binomial distribution}
+\concept{S4 distribution class}
+\concept{generating function}
+\end{lstlisting}
+
+%
+\item {\footnotesize you could have: \file{man/Binom.Rd}
+      for the generating function; in the Binomial case, documentation is in
+      \file{Binom-class.Rd}; but in case of the Gumbel distribution,
+      in package \pkg{RobExtremes}, there is such an extra {\tt .Rd} file}
+%
+\end{itemize}
+%
+\item in \pkg{distrEx}, see sources in
+%
+<<Prepa2, echo=FALSE, results="asis">>=
+## preparation: set option withSweave to TRUE
+require(distrEx)
+@
+%
+\begin{itemize}
+%
+\item\file{Expectation.R}, 
+<<Expect, results="asis", echo=TRUE>>=
+setMethod("E", signature(object = "Binom",
+                         fun = "missing",
+                         cond = "missing"),
+    function(object, low = NULL, upp = NULL, ...){
+    if(!is.null(low)) if(low <= min(support(object))) low <- NULL
+    if(!is.null(upp)) if(upp >= max(support(object))) upp <- NULL
+    if(is.null(low) && is.null(upp))
+        return(size(object)*prob(object))
+    else{
+        if(is.null(low)) low <- -Inf
+        if(is.null(upp)) upp <- Inf
+        if(low == -Inf){
+           if(upp == Inf) return(size(object)*prob(object))
+           else return(m1df(object, upper = upp, ...))
+        }else{
+           E1 <- m1df(object, upper = low, ...)
+           E2 <- if(upp == Inf)
+                    size(object)*prob(object) else m1df(object, upper = upp, ...)
+           return(E2-E1)
+        }
+    }
+   })
+@
+%
+\item\file{Functionals.R}, 
+<<var, results="asis", echo=TRUE>>=
+setMethod("var", signature(x = "Binom"),
+    function(x,...){
+    dots <- match.call(call = sys.call(sys.parent(1)),
+                       expand.dots = FALSE)$"..."
+    fun <- NULL; cond <- NULL; low <- NULL; upp <- NULL
+    if(hasArg(low)) low <- dots$low
+    if(hasArg(upp)) upp <- dots$upp
+    if(hasArg(fun)||hasArg(cond)||!is.null(low)||!is.null(upp))
+        return(var(as(x,"DiscreteDistribution"),...))
+    else
+        return(size(x)*prob(x)*(1-prob(x)))
+    })
+@
+%
+\item\file{skewness.R}, 
+<<skew, results="asis", echo=TRUE>>=
+setMethod("skewness", signature(x = "Binom"),
+    function(x,  ...){
+    dots <- match.call(call = sys.call(sys.parent(1)),
+                       expand.dots = FALSE)$"..."
+    fun <- NULL; cond <- NULL; low <- NULL; upp <- NULL
+    if(hasArg(low)) low <- dots$low
+    if(hasArg(upp)) upp <- dots$upp
+    if(hasArg(fun)||hasArg(cond)||!is.null(low)||!is.null(upp))
+       return(skewness(as(x,"DiscreteDistribution"),...))
+    else
+        return((1-2*prob(x))/sqrt(size(x)*prob(x)*(1-prob(x))))
+    })
+@
+%
+\item\file{kurtosis.R}, 
+<<kurt, results="asis", echo=TRUE>>=
+setMethod("kurtosis", signature(x = "Binom"),
+    function(x,  ...){
+    dots <- match.call(call = sys.call(sys.parent(1)),
+                       expand.dots = FALSE)$"..."
+    fun <- NULL; cond <- NULL; low <- NULL; upp <- NULL
+    if(hasArg(low)) low <- dots$low
+    if(hasArg(upp)) upp <- dots$upp
+    if(hasArg(fun)||hasArg(cond)||!is.null(low)||!is.null(upp))
+       return(kurtosis(as(x,"DiscreteDistribution"),...))
+    else
+        p <- prob(x)
+        return((1-6*p*(1-p))/(size(x)*p*(1-p)))
+    })
+@
+%
+\end{itemize}
+\end{enumerate}
+The procedure will be similar for \textit{any} new class of distributions.\medskip
+\begin{itemize}
+  \item[Comment] In the classes in package \pkg{distr} (historically the ``oldest''
+  in the development of this project), we still use \code{initialize} methods;
+  this is no longer needed, if you provide generating functions; for this ``more
+  recent'' approach, confer the realization of class \code{Gumbel} in package \pkg{RobExtremes}.
+\end{itemize}
+
+% -------------------------------------------------------------------------------
+\section{Help needed  / collaboration welcome}
+% -------------------------------------------------------------------------------
+You are --- as announced on  
+\href{https://distr.r-forge.r-project.org}{\tt http://distr.r-forge.r-project.org} ---
+         very welcome to collaborate in this project!
+See in particular
+\href{https://distr.r-forge.r-project.org/HOWTO-collaborate.txt}%
+{\tt https://distr.r-forge.r-project.org/HOWTO-collaborate.txt}
+
+With this you should be able to start working.
+\begin{thebibliography}{2}
+
+\bibitem{K:R:S:04}
+Ruckdeschel P. and Kohl, M. (2014):
+\newblock {General Purpose Convolution Algorithm for Distributions in S4-Classes 
+by means of FFT}.
+\newblock {\em J. Statist. Software\/}, {\bf 59}(4): 1--25.
+
+\bibitem{R:K:S:C:04}
+Ruckdeschel P., Kohl M., Stabla T., and Camphausen F. (2006):
+\newblock {S4 Classes for Distributions.} 
+\newblock {\em R-News\/}, {\bf 6}(2): 10--13.
+\newblock https://CRAN.R-project.org/doc/Rnews/Rnews\_2006-2.pdf
+%\newblock See also {http://www.uni-bayreuth.de/departments/math/org/mathe7/RUCKDESCHEL/pubs/distr.pdf}
+
+\end{thebibliography}
+% no longer needed
+%%(ll)cleanup, echo=FALSE(ggeq)
+%%#unloadNamespace("SweaveListingUtils")
+%%(at)
+% -------------------------------------------------------------------------------
+\end{document}
+% -------------------------------------------------------------------------------

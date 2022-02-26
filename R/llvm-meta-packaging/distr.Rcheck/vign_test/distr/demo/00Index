@@ -1,0 +1,15 @@
+ComparisonFFTandRtoDPQ      This example illustrates the exactness (or rather not--so--exactness) of the simulational default algorithm used to compute the distribution of transformations of group "math"
+ConvolutionNormalDistr      Comparison of exact convolution to FFT for normal distributions:
+                This example illustrates the exactness of the numerical FFT algorithm used to compute the convolution:
+                As we know that the normal distribution is closed under convolution, we may compare the p- and d- slots filled by the FFT algorithm to the exact p- and d-functions. 
+destructive         Instructive destructive example:
+                how accessing/replacing slots by means of the @-operator may lead to inconsistent objects.
+Expectation         Expectation of a given function under a given distribution:
+                We illustrate the use of package "distr" by implementing a general evaluation of expectation and variance under a given distribution.           
+nFoldConvolution        n-fold convolution of absolutely continuous distributions:
+                Might be useful for teaching the CLT:
+                a straightforward implementation of the $n$--fold convolution of an arbitrary implemented absolutely continuous distribution --- to show accuracy of our method we compare it to the exact formula valid for $n$-fold convolution of normal distributions.
+NormApprox          This example shows how easily we may get the distribution of the sum of 12 i.i.d. uniform (0,1)-variables minus 6 --- a standard example for an opaque generator for N(0,1)-variables. The user should not be confused by expressions like U+U: this *does not* mean 2U but rather convolution of two independent identically distributed random variables.
+StationaryRegressorDistr    Comparison of exact and approximate stationary regressor distribution:
+                In case of a stationary AR(1)--model, for non--normal innovation distribution, the stationary distribution of the observations must be approximated by finite convolutions. That these approximations give fairly good results for approximations down to small orders is exemplified by the Gaussian case where we may compare the approximation to the exact stationary distribution.
+range           Asked for in an e-mail by Spencer Graves: distribution of the range of n i.i.d. random variables..

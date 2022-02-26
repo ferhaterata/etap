@@ -1,0 +1,12 @@
+Package: memory
+Type: Package
+Title: Random Access Memory Implementation for Symbolic Execution
+Version: 0.1
+Date: 2021-06-05
+Author: Ferhat Erata
+Maintainer: Ferhat Erata <ferhat.erata@yale.edu>
+Description: Random Access Memory Implementation for Symbolic Execution
+License: GPL (>= 2)
+Imports: Rcpp (>= 1.0.6)
+LinkingTo: Rcpp
+SystemRequirements: C++14
